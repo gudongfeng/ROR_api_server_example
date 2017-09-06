@@ -1,0 +1,488 @@
+{
+  "students#activate_account": [
+    {
+      "verb": "POST",
+      "path": "/api/v1/students/activate_account",
+      "versions": [
+        "v1"
+      ],
+      "query": null,
+      "request_data": {
+        "verification_code": "4567"
+      },
+      "response_data": {
+        "message": "successfully activated, please return and login"
+      },
+      "code": "200",
+      "show_in_doc": 1,
+      "recorded": true
+    },
+    {
+      "verb": "POST",
+      "path": "/api/v1/students/activate_account",
+      "versions": [
+        "v1"
+      ],
+      "query": null,
+      "request_data": {
+        "verification_code": "123"
+      },
+      "response_data": {
+        "error": "invalid verification code"
+      },
+      "code": "401",
+      "show_in_doc": 0,
+      "recorded": true
+    }
+  ],
+  "students#create": [
+    {
+      "verb": "POST",
+      "path": "/api/v1/students/signup",
+      "versions": [
+        "v1"
+      ],
+      "query": null,
+      "request_data": {
+        "student": {
+          "country_code": "86",
+          "gender": "male",
+          "name": "testName",
+          "password": "testPassword",
+          "password_confirmation": "testPassword",
+          "phoneNumber": "88888888",
+          "picture": "http://fakeURL"
+        }
+      },
+      "response_data": {
+        "message": "successfully sign up",
+        "student_id": 9
+      },
+      "code": "200",
+      "show_in_doc": 1,
+      "recorded": true
+    },
+    {
+      "verb": "POST",
+      "path": "/api/v1/students/signup",
+      "versions": [
+        "v1"
+      ],
+      "query": null,
+      "request_data": {
+        "fake": "fake"
+      },
+      "response_data": {
+        "error": "parameters missing"
+      },
+      "code": "400",
+      "show_in_doc": 0,
+      "recorded": true
+    },
+    {
+      "verb": "POST",
+      "path": "/api/v1/students/signup",
+      "versions": [
+        "v1"
+      ],
+      "query": null,
+      "request_data": {
+        "student": {
+          "country_code": "71263",
+          "gender": "maleasdf",
+          "name": "testName",
+          "password": "testPassword",
+          "password_confirmation": "testPassword",
+          "phoneNumber": "qweoiru",
+          "picture": "http://fakeURL"
+        }
+      },
+      "response_data": {
+        "error": "error : phoneNumber - is invalid,gender - is not included in the list,country_code - is not included in the list,"
+      },
+      "code": "422",
+      "show_in_doc": 0,
+      "recorded": true
+    }
+  ],
+  "students#destroy": [
+    {
+      "verb": "DELETE",
+      "path": "/api/v1/students/signout",
+      "versions": [
+        "v1"
+      ],
+      "query": null,
+      "request_data": {
+      },
+      "response_data": {
+        "message": "successfully logout"
+      },
+      "code": "200",
+      "show_in_doc": 1,
+      "recorded": true
+    }
+  ],
+  "students#edit": [
+    {
+      "verb": "PATCH",
+      "path": "/api/v1/students/info",
+      "versions": [
+        "v1"
+      ],
+      "query": null,
+      "request_data": {
+        "student": {
+          "device_token": "test_token"
+        }
+      },
+      "response_data": {
+        "message": "successfully update the information"
+      },
+      "code": "200",
+      "show_in_doc": 1,
+      "recorded": true
+    }
+  ],
+  "students#get_status": [
+    {
+      "verb": "GET",
+      "path": "/api/v1/students/status",
+      "versions": [
+        "v1"
+      ],
+      "query": "",
+      "request_data": null,
+      "response_data": {
+        "state": "available",
+        "session_id": 1,
+        "prioritized_tutor": null,
+        "current_request": null,
+        "appointment_id": -1
+      },
+      "code": "200",
+      "show_in_doc": 1,
+      "recorded": true
+    }
+  ],
+  "students#reset_password": [
+    {
+      "verb": "POST",
+      "path": "/api/v1/students/reset_password",
+      "versions": [
+        "v1"
+      ],
+      "query": null,
+      "request_data": {
+        "verification_code": "1234"
+      },
+      "response_data": {
+        "message": "successfully verified the verification code"
+      },
+      "code": "200",
+      "show_in_doc": 1,
+      "recorded": true
+    },
+    {
+      "verb": "POST",
+      "path": "/api/v1/students/reset_password",
+      "versions": [
+        "v1"
+      ],
+      "query": null,
+      "request_data": {
+        "password": "new_pass",
+        "password_confirmation": "new_pass",
+        "verification_code": "1234"
+      },
+      "response_data": {
+        "message": "successfully reset the password"
+      },
+      "code": "200",
+      "show_in_doc": 0,
+      "recorded": true
+    }
+  ],
+  "students#send_verification_code": [
+    {
+      "verb": "GET",
+      "path": "/api/v1/students/send_verification_code",
+      "versions": [
+        "v1"
+      ],
+      "query": "",
+      "request_data": null,
+      "response_data": {
+        "message": "successfully resend the code, please check your message"
+      },
+      "code": "200",
+      "show_in_doc": 1,
+      "recorded": true
+    }
+  ],
+  "students#show": [
+    {
+      "verb": "GET",
+      "path": "/api/v1/students/info",
+      "versions": [
+        "v1"
+      ],
+      "query": "",
+      "request_data": null,
+      "response_data": {
+        "id": 1,
+        "name": "student1",
+        "email": "student1@example.com",
+        "phoneNumber": "11111111",
+        "state": "available",
+        "country_code": 1,
+        "balance": null,
+        "prioritized_tutor": null,
+        "gender": "male"
+      },
+      "code": "200",
+      "show_in_doc": 1,
+      "recorded": true
+    }
+  ],
+  "tutors#activate_account": [
+    {
+      "verb": "POST",
+      "path": "/api/v1/tutors/activate_account",
+      "versions": [
+        "v1"
+      ],
+      "query": null,
+      "request_data": {
+        "verification_code": "4567"
+      },
+      "response_data": {
+        "message": "successfully activated, please return and login"
+      },
+      "code": "200",
+      "show_in_doc": 1,
+      "recorded": true
+    }
+  ],
+  "tutors#create": [
+    {
+      "verb": "POST",
+      "path": "/api/v1/tutors/signup",
+      "versions": [
+        "v1"
+      ],
+      "query": null,
+      "request_data": {
+        "tutor": {
+          "country_code": "86",
+          "education": {
+            "a": {
+              "degree": "bachelor",
+              "end_time": "2017-07-22 09:31:24 -0400",
+              "major": "computer science",
+              "school": "abc school",
+              "start_time": "2017-07-22 09:31:24 -0400"
+            },
+            "b": {
+              "degree": "master",
+              "end_time": "2017-07-22 09:31:24 -0400",
+              "major": "computer science",
+              "school": "cde school",
+              "start_time": "2017-07-22 09:31:24 -0400"
+            }
+          },
+          "email": "test@test.com",
+          "gender": "male",
+          "name": "tutor",
+          "password": "123456",
+          "password_confirmation": "123456",
+          "phoneNumber": "88888888",
+          "picture": "http://picture.url"
+        }
+      },
+      "response_data": {
+        "message": "successfully sign up"
+      },
+      "code": "200",
+      "show_in_doc": 1,
+      "recorded": true
+    }
+  ],
+  "tutors#destroy": [
+    {
+      "verb": "DELETE",
+      "path": "/api/v1/tutors/signout",
+      "versions": [
+        "v1"
+      ],
+      "query": null,
+      "request_data": {
+      },
+      "response_data": {
+        "message": "successfully logout"
+      },
+      "code": "200",
+      "show_in_doc": 1,
+      "recorded": true
+    }
+  ],
+  "tutors#edit": [
+    {
+      "verb": "PATCH",
+      "path": "/api/v1/tutors/info",
+      "versions": [
+        "v1"
+      ],
+      "query": null,
+      "request_data": {
+        "tutor": {
+          "device_token": "test_token",
+          "education": {
+            "a": {
+              "degree": "bachelor",
+              "end_time": "2017-07-22 09:31:24 -0400",
+              "id": "2",
+              "major": "computer science",
+              "school": "abc school",
+              "start_time": "2017-07-22 09:31:24 -0400"
+            },
+            "b": {
+              "degree": "bachelor",
+              "end_time": "2017-07-22 09:31:24 -0400",
+              "major": "computer science",
+              "school": "cde school",
+              "start_time": "2017-07-22 09:31:24 -0400"
+            }
+          }
+        }
+      },
+      "response_data": {
+        "message": "successfully update the information"
+      },
+      "code": "200",
+      "show_in_doc": 1,
+      "recorded": true
+    },
+    {
+      "verb": "PATCH",
+      "path": "/api/v1/tutors/info",
+      "versions": [
+        "v1"
+      ],
+      "query": null,
+      "request_data": {
+        "tutor": {
+          "education": {
+            "a": {
+              "degree": "bachelor",
+              "end_time": "2017-07-22 09:31:24 -0400",
+              "major": "computer science",
+              "school": "abc school",
+              "start_time": "2017-07-22 09:31:24 -0400"
+            }
+          }
+        }
+      },
+      "response_data": {
+        "message": "successfully update the information"
+      },
+      "code": "200",
+      "show_in_doc": 0,
+      "recorded": true
+    }
+  ],
+  "tutors#reset_password": [
+    {
+      "verb": "POST",
+      "path": "/api/v1/tutors/reset_password",
+      "versions": [
+        "v1"
+      ],
+      "query": null,
+      "request_data": {
+        "verification_code": "1234"
+      },
+      "response_data": {
+        "message": "successfully verified the verification code"
+      },
+      "code": "200",
+      "show_in_doc": 1,
+      "recorded": true
+    },
+    {
+      "verb": "POST",
+      "path": "/api/v1/tutors/reset_password",
+      "versions": [
+        "v1"
+      ],
+      "query": null,
+      "request_data": {
+        "password": "new_pass",
+        "password_confirmation": "new_pass",
+        "verification_code": "1234"
+      },
+      "response_data": {
+        "message": "successfully reset the password"
+      },
+      "code": "200",
+      "show_in_doc": 0,
+      "recorded": true
+    }
+  ],
+  "tutors#send_verification_code": [
+    {
+      "verb": "GET",
+      "path": "/api/v1/tutors/send_verification_code",
+      "versions": [
+        "v1"
+      ],
+      "query": "",
+      "request_data": null,
+      "response_data": {
+        "message": "successfully resend the code, please check your message"
+      },
+      "code": "200",
+      "show_in_doc": 1,
+      "recorded": true
+    }
+  ],
+  "tutors#show": [
+    {
+      "verb": "GET",
+      "path": "/api/v1/tutors/info",
+      "versions": [
+        "v1"
+      ],
+      "query": "",
+      "request_data": null,
+      "response_data": {
+        "id": 1,
+        "name": "tutor1",
+        "email": "tutor1@example.com",
+        "phoneNumber": "11111111",
+        "state": "available",
+        "country_code": 1,
+        "country": "canada",
+        "picture": "http://example.com",
+        "region": "ottawa",
+        "description": "sample description",
+        "balance": "0.0",
+        "level": 1,
+        "gender": "male",
+        "educations": [
+          {
+            "id": 1,
+            "degree": "bachelor",
+            "school": "test schoold",
+            "major": "test major",
+            "start_time": "2017-07-15",
+            "end_time": "2017-07-22"
+          }
+        ]
+      },
+      "code": "200",
+      "show_in_doc": 1,
+      "recorded": true
+    }
+  ]
+}

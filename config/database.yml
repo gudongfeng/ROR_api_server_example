@@ -1,0 +1,21 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: 5
+  username: dgu 
+  password: 
+  # host: postgres # This setting is for docker
+
+development:
+  <<: *default
+  database: tws_development
+
+test:
+  <<: *default
+  database: tws_test
+
+production:
+  <<: *default
+  database: tws_production 
+  username: TWS_Server
+  password: <%= ENV['TWS_SERVER_DATABASE_PASSWORD'] %>

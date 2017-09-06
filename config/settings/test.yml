@@ -1,0 +1,3 @@
+Yunpian:
+  sms_url: https://sms.yunpian.com/v2/sms/single_send.json
+  apikey: asdfasdfasdfasdfasdfasdfasdfasdfasdf

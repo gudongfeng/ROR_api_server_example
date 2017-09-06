@@ -1,0 +1,55 @@
+
+# (updated) student price setting
+price_plan_1: 36 # the price for plan 1
+price_plan_2: 88 # the price for plan 2
+price_plan_3: 128 # the price for plan 3
+
+# (updated) tutor price setting
+tutor_earned_plan_1: 3 # the tutor earn price for plan 1
+tutor_earned_plan_2: 7 # the tutor earn price for plan 2
+tutor_earned_plan_3: 9 # the tutor earn price for plan 3
+
+# (updated) call length setting
+call_length_plan_1: <%= 10.minutes %> # the call length for plan 1
+call_length_plan_2: <%= 50.minutes %> # the call length for plan 2
+call_length_plan_3: <%= 50.minutes %> # the call length for plan 3
+
+# (updated) 
+call_delay_time: <%= 30 %>           # wait for time call is 30 seconds
+call_speak_reminder_time: <%= 60 %>  # reminder for calling end
+single_notification_tutor_count: 3   # when a student make a request, the number of online tutor who will receive the notification.
+
+income_call_number: 
+
+heroku_server: 
+client_heroku_server: 
+client_heroku_dev_server: 
+
+login_expiry_time: <%= 12*31*24*60*60 %> # one year
+
+tutor_online_time: 10800 # how much time the tutor can keep online
+tutor_single_price: 3
+
+# tutor online time
+tutor_start_time: 20
+tutor_end_time: 22
+
+Reservation:
+  look_for_tutor_time: 90 # seconds
+  look_for_tutor_number: 2
+  tutor_reply_time: 30 # seconds
+  delta: 5 # buffer time for server to wait for the workers
+
+Plivo:
+  auth_id: 
+  auth_token: 
+
+Twilio:
+  account_sid: 
+  auth_token: 
+  api_key: 
+  api_secret: 
+
+Yunpian:
+  sms_url: 
+  apikey: 
