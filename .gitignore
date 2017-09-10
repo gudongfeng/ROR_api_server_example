@@ -43,3 +43,8 @@ dump.rdb
 
 cable_client
 *DS_Store*
+
+
+docker-compose.yml
+certs/
+settings.yml
