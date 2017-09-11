@@ -13,6 +13,7 @@ en:
   appointment:
     conference_room:
       call_delay: conference room will start in %{time} seconds
+      call_end: conference room will end in %{time} seconds
   students:
     create:
       success: successfully sign up

@@ -22,13 +22,15 @@ RSpec.describe StudentChannel, type: :channel do
     # add tutor to tutor online queue
     TutorOnlineQueue.instance.push(1)
     @channel.perform_action(data)
-    expect(TutorMessageBroadcastJob).to have_been_enqueued.with(
-      data['tutor_id'], 'comming_request', { student_id: @student.id, plan_id: data['plan_id'] })
+    expect(MessageBroadcastJob).to have_been_enqueued.with(
+      { student_id: @student.id, plan_id: data['plan_id'] },
+      'comming_request', data['tutor_id'])
   end
 
   it "fails because tutor is not available" do
     @channel.perform_action(data)
-    expect(StudentMessageBroadcastJob).to have_been_enqueued.with(
-      @student.id, 'error', I18n.t('students.errors.appointment.busy'))
+    expect(MessageBroadcastJob).to have_been_enqueued.with(
+      I18n.t('students.errors.appointment.busy'), 'error',
+      student_id = @student.id)
   end
 end

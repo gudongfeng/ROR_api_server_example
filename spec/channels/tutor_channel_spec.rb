@@ -15,8 +15,8 @@ RSpec.describe TutorChannel, type: :channel do
     {
       "action"    => "response",
       "response"  => "accept",
-      "plan_id"   => 1,
-      "student_id"=> student.id
+      "message"   => { "plan_id"   => 1,
+                       "student_id"=> student.id }
     }
   end
 

@@ -9,25 +9,28 @@ class StudentChannel < ApplicationCable::Channel
   end
 
   # Student make a request
+  #
   # Args:
   #   data["plan_id"]: student request plan_id
   # Returns:
   #   success: broadcast request to tutor
   #   fail: broadcast fail message to student
   def request(data)
-    tutors = TutorOnlineQueue.instance.poll(Settings.single_notification_tutor_count)
+    fetch_tutor_count = Settings.single_notification_tutor_count
+    tutors = TutorOnlineQueue.instance.poll(fetch_tutor_count)
     if !tutors.empty?
       # broadcast the student request to tutors
       for tutor_id in tutors
         message = { student_id: current_user.id, plan_id: data['plan_id'] }
-        TutorMessageBroadcastJob.perform_later(
-          tutor_id, 'comming_request', message)
+        MessageBroadcastJob.perform_later(message,
+                                          'comming_request',
+                                          tutor_id = tutor_id)
       end
     else
       # tutor is not available
-      StudentMessageBroadcastJob.perform_later(
-        current_user.id, 'error',
-        I18n.t('students.errors.appointment.busy'))
+      MessageBroadcastJob.perform_later(
+        I18n.t('students.errors.appointment.busy'),
+        'error', student_id = current_user.id)
     end
   end
 end
