@@ -8,8 +8,14 @@ class CompleteCallJob < ApplicationJob
 
     client ||= Twilio::REST::Client.new(account_sid, auth_token)
 
-    room_sid = Core::Appointment.find(appointment_id).conference_name
+    appointment = Core::Appointment.find(appointment_id)
+    room_sid = appointment.conference_name
     room = client.video.rooms(room_sid).update(status: 'completed')
-    # TODO: notifiy both student and tutor that the conference room terminated
+    
+    # Notifiy both student and tutor that the conference room terminated
+    msg = I18n.t('appointment.conference_room.call_terminated')
+    MessageBroadcastJob.perform_later(msg, 'notification',
+                                      student_id = appointment.student_id,
+                                      tutor_id = appointment.tutor_id)
   end
 end

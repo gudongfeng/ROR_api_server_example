@@ -14,6 +14,7 @@ cn:
     conference_room:
       call_delay: 通话将于 %{time} 秒后开始
       call_end: 通话将于 %{time} 秒后结束
+      call_terminated: 通话结束
   students:
     create:
       success: 成功注册账号, 请使用激活码激活账号

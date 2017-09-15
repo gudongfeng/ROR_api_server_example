@@ -5,7 +5,7 @@ class MessageBroadcastJob < ApplicationJob
   #
   # Args
   #   message: message content
-  #   type:    message type ('error', 'join_conference', 'notification')
+  #   type:    message type ('error', 'join_conference', 'notification', 'comming_request')
   #   student_id: student id
   #   tutor_id:   tutor id
   def perform(message, type, student_id=nil, tutor_id=nil)
