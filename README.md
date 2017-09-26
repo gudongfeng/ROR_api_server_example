@@ -64,4 +64,5 @@
     5. SYSTEM: Initialize the end calling active job that terminate the conference call in certain minutes
     6. SYSTEM: Notify student and tutor before the call end
     7. STUDENT: (OPTION) Renew the call
+    8. SYSTEM: Terminate the conference room
 

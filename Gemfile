@@ -8,7 +8,6 @@ gem 'sdoc', '~> 0.4.2', group: :doc
 gem 'pg', '~> 0.21.0'
 gem 'redis', '~> 3.3', '>= 3.3.1'
 gem 'pingpp', '~> 2.1'
-gem 'plivo', '~> 0.3.19'
 gem 'sidekiq', '~> 5.0', '>= 5.0.3'
 gem 'config', '~> 1.4'
 gem 'wisper', '~> 2.0'
