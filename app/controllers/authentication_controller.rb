@@ -1,4 +1,5 @@
 class AuthenticationController < ApplicationController
+  # Authenticate the student account
   api :POST, '/authenticate/student', 'authenticate the student account'
   api_version 'root'
   param :phone, String, :desc => 'student phone number', :required => true
@@ -18,6 +19,7 @@ class AuthenticationController < ApplicationController
     end
   end
 
+  # Authenticate the tutor account
   api :POST, '/authenticate/tutor', 'authenticate the tutor account'
   api_version 'root'
   param :phone, String, :desc => 'tutor phone number', :required => true

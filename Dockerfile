@@ -1,11 +1,11 @@
 FROM ruby:2.2.6-slim
-MAINTAINER Dongfeng Gu <gudongfeng@outlook.com>
+LABEL maintainer="Dongfeng Gu <gudongfeng@outlook.com>"
 
 # Ensure that our apt package list is updated and install a few
 # packages to ensure that we can compile assets (nodejs) and
 # communicate with PostgreSQL (libpq-dev).
 RUN apt-get update && apt-get install -qq -y --no-install-recommends \
-      build-essential nodejs libpq-dev
+      build-essential nodejs libpq-dev`
 
 # Define the project path
 ENV INSTALL_PATH /TalkWithSam
