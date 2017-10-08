@@ -1,10 +1,10 @@
-FROM ruby:2.2.6-slim
+FROM ruby:2.3.3
 LABEL maintainer="Dongfeng Gu <gudongfeng@outlook.com>"
 
 # Ensure that our apt package list is updated and install a few
 # packages to ensure that we can compile assets (nodejs) and
 # communicate with PostgreSQL (libpq-dev).
-RUN apt-get update && apt-get install -qq -y --no-install-recommends \
+RUN apt-get update -qq && apt-get install -y \
       build-essential nodejs libpq-dev`
 
 # Define the project path
@@ -21,12 +21,13 @@ WORKDIR $INSTALL_PATH
 # This is going to copy in the Gemfile and Gemfile.lock from our
 # work station at a path relative to the Dockerfile to the
 # my_dockerized_app/ path inside of the Docker image.
-ADD Gemfile Gemfile.lock ./
+ADD Gemfile ./Gemfile
+ADD Gemfile.lock ./Gemfile.lock
 
 # We want binstubs to be available so we can directly call sidekiq and
 # potentially other binaries as command overrides without depending on
 # bundle exec.
-RUN bundle install --binstubs
+RUN bundle install
 
 # Copy the whole project to the image file
 ADD . .
