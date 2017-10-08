@@ -5,7 +5,7 @@ LABEL maintainer="Dongfeng Gu <gudongfeng@outlook.com>"
 # packages to ensure that we can compile assets (nodejs) and
 # communicate with PostgreSQL (libpq-dev).
 RUN apt-get update -qq && apt-get install -y \
-      build-essential nodejs libpq-dev`
+      build-essential nodejs libpq-dev
 
 # Define the project path
 ENV INSTALL_PATH /TalkWithSam
@@ -21,8 +21,7 @@ WORKDIR $INSTALL_PATH
 # This is going to copy in the Gemfile and Gemfile.lock from our
 # work station at a path relative to the Dockerfile to the
 # my_dockerized_app/ path inside of the Docker image.
-ADD Gemfile ./Gemfile
-ADD Gemfile.lock ./Gemfile.lock
+ADD Gemfile Gemfile.lock ./
 
 # We want binstubs to be available so we can directly call sidekiq and
 # potentially other binaries as command overrides without depending on
