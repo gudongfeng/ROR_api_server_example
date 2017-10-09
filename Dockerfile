@@ -1,11 +1,11 @@
-FROM ruby:2.2.6-slim
+FROM ruby:2.3.3
 LABEL maintainer="Dongfeng Gu <gudongfeng@outlook.com>"
 
 # Ensure that our apt package list is updated and install a few
 # packages to ensure that we can compile assets (nodejs) and
 # communicate with PostgreSQL (libpq-dev).
-RUN apt-get update && apt-get install -qq -y --no-install-recommends \
-      build-essential nodejs libpq-dev`
+RUN apt-get update -qq && apt-get install -y \
+      build-essential nodejs libpq-dev
 
 # Define the project path
 ENV INSTALL_PATH /TalkWithSam
@@ -26,7 +26,7 @@ ADD Gemfile Gemfile.lock ./
 # We want binstubs to be available so we can directly call sidekiq and
 # potentially other binaries as command overrides without depending on
 # bundle exec.
-RUN bundle install --binstubs
+RUN bundle install
 
 # Copy the whole project to the image file
 ADD . .

@@ -45,4 +45,7 @@ Rails.application.configure do
 
   # Adjust the log level
   config.log_level = :WARN
+
+  # Environment setting
+  ENV['JOB_WORKER_URL'] = 'redis://localhost:6379/0'
 end

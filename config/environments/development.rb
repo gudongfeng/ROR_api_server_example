@@ -54,4 +54,7 @@ Rails.application.configure do
 
   # config.action_cable.allowed_request_origins = ['http://localhost:3000', 'file://','']
   config.action_cable.disable_request_forgery_protection = true
+
+  # Environment settings
+  ENV['JOB_WORKER_URL'] = 'redis://localhost:6379/0'
 end

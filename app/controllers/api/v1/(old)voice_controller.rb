@@ -1,6 +1,6 @@
 require 'rubygems'
-require 'plivo'
-include Plivo
+# require 'plivo'
+# include Plivo
 
 class Api::V1::VoiceController < Api::ApiController
   before_action :check_for_tutor_valid_authtoken, :only => [:reconnect]

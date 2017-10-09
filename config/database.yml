@@ -4,7 +4,6 @@ default: &default
   pool: 5
   username: dgu 
   password: 
-  # host: postgres # This setting is for docker
 
 development:
   <<: *default
@@ -16,6 +15,4 @@ test:
 
 production:
   <<: *default
-  database: tws_production 
-  username: TWS_Server
-  password: <%= ENV['TWS_SERVER_DATABASE_PASSWORD'] %>
+  url: <%= ENV['DATABASE_URL'] %>
