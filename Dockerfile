@@ -28,9 +28,5 @@ ADD Gemfile Gemfile.lock ./
 # bundle exec.
 RUN bundle install
 
-# Set Rails to run in production
-ENV RAILS_ENV production 
-ENV RACK_ENV production
-
 # Copy the whole project to the image file
 ADD . .

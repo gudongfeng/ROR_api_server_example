@@ -1,4 +1,62 @@
 {
+  "apipies#index": [
+    {
+      "verb": "GET",
+      "path": "/api_doc",
+      "versions": [
+
+      ],
+      "query": null,
+      "request_data": null,
+      "response_data": "<!DOCTYPE html>\n<html>\n<head>\n  <title>API documentation</title>\n  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n  <link type='text/css' rel='stylesheet' href='/api_doc/stylesheets/bundled/bootstrap.min.css'/>\n<link type='text/css' rel='stylesheet' href='/api_doc/stylesheets/bundled/prettify.css'/>\n<link type='text/css' rel='stylesheet' href='/api_doc/stylesheets/bundled/bootstrap-responsive.min.css'/>\n  <link type='text/css' rel='stylesheet' href='/api_doc/stylesheets/application.css'/>\n  <!-- IE6-8 support of HTML5 elements -->\n  <!--[if lt IE 9]>\n    <script src=\"//html5shim.googlecode.com/svn/trunk/html5.js\"></script>\n  <![endif]-->\n</head>\n<body>\n  <div class=\"container-fluid\">\n    <div class=\"row-fluid\">\n      <div id='container'>\n        <ul class='breadcrumb'>\n  <li class='active'><a href='/api_doc/v1.en.html'>TWSServer v1</a></li>\n  \n  <li class='pull-right'>\n    <a href=\"/api_doc/root.en.html\">root</a> / <a href=\"/api_doc/v1.en.html\">v1</a>\n  </li>\n</ul>\n\n<div>\n<p>v1 API</p>\n</div>\n\n<h1 class='page-header'>Resources</h1>\n\n  <h2>\n    <a href='/api_doc/v1/students.en.html'>\n      Students\n    </a><br>\n    <small></small>\n  </h2>\n  <table class='table'>\n    <thead>\n      <tr>\n        <th>Resource</th>\n        <th>Description</th>\n      </tr>\n    </thead>\n    <tbody>\n          <tr>\n            <td>\n              <a href='/api_doc/v1/students/create.en.html'>POST /api/v1/students/signup</a>\n            </td>\n            <td width='60%'>student sign up</td>\n          </tr>\n          <tr>\n            <td>\n              <a href='/api_doc/v1/students/activate_account.en.html'>POST /api/v1/students/activate_account</a>\n            </td>\n            <td width='60%'>activate student</td>\n          </tr>\n          <tr>\n            <td>\n              <a href='/api_doc/v1/students/edit.en.html'>PATCH /api/v1/students/info</a>\n            </td>\n            <td width='60%'>edit the student information</td>\n          </tr>\n          <tr>\n            <td>\n              <a href='/api_doc/v1/students/show.en.html'>GET /api/v1/students/info</a>\n            </td>\n            <td width='60%'>get the information of a single student</td>\n          </tr>\n          <tr>\n            <td>\n              <a href='/api_doc/v1/students/reset_password.en.html'>POST /api/v1/students/reset_password</a>\n            </td>\n            <td width='60%'>[(step 2,3) for resetting the password],\n    you need to call send_verification_code first to send an sms message to student,\n    verify the verification code only if password and password confirmation absent</td>\n          </tr>\n          <tr>\n            <td>\n              <a href='/api_doc/v1/students/send_verification_code.en.html'>GET /api/v1/students/send_verification_code</a>\n            </td>\n            <td width='60%'>[(step 1) for resetting the\n    password] request to send a new verification_code for account activation\n    and password reset</td>\n          </tr>\n          <tr>\n            <td>\n              <a href='/api_doc/v1/students/get_status.en.html'>GET /api/v1/students/status</a>\n            </td>\n            <td width='60%'>get the student status</td>\n          </tr>\n          <tr>\n            <td>\n              <a href='/api_doc/v1/students/destroy.en.html'>DELETE /api/v1/students/signout</a>\n            </td>\n            <td width='60%'>signout students, clean the device token</td>\n          </tr>\n    </tbody>\n  </table>\n  <h2>\n    <a href='/api_doc/v1/tutors.en.html'>\n      Tutors\n    </a><br>\n    <small></small>\n  </h2>\n  <table class='table'>\n    <thead>\n      <tr>\n        <th>Resource</th>\n        <th>Description</th>\n      </tr>\n    </thead>\n    <tbody>\n          <tr>\n            <td>\n              <a href='/api_doc/v1/tutors/show.en.html'>GET /api/v1/tutors/info</a>\n            </td>\n            <td width='60%'>get the information of a single tutor</td>\n          </tr>\n          <tr>\n            <td>\n              <a href='/api_doc/v1/tutors/create.en.html'>POST /api/v1/tutors/signup</a>\n            </td>\n            <td width='60%'>tutor sign up</td>\n          </tr>\n          <tr>\n            <td>\n              <a href='/api_doc/v1/tutors/activate_account.en.html'>POST /api/v1/tutors/activate_account</a>\n            </td>\n            <td width='60%'>activate tutor account</td>\n          </tr>\n          <tr>\n            <td>\n              <a href='/api_doc/v1/tutors/edit.en.html'>PATCH /api/v1/tutors/info</a>\n            </td>\n            <td width='60%'>edit the tutor information</td>\n          </tr>\n          <tr>\n            <td>\n              <a href='/api_doc/v1/tutors/reset_password.en.html'>POST /api/v1/tutors/reset_password</a>\n            </td>\n            <td width='60%'>[(step 2,3) for resetting the password],\n    you need to call send_verification_code first to send an sms message to tutor,\n    verify the verification code only if password and password confirmation absent</td>\n          </tr>\n          <tr>\n            <td>\n              <a href='/api_doc/v1/tutors/send_verification_code.en.html'>GET /api/v1/tutors/send_verification_code</a>\n            </td>\n            <td width='60%'>[(step 1) for resetting the\n    password] request to send a new verification_code for account activation\n    and password reset</td>\n          </tr>\n          <tr>\n            <td>\n              <a href='/api_doc/v1/tutors/get_status.en.html'>GET /api/v1/tutors/status</a>\n            </td>\n            <td width='60%'>get the tutor current status</td>\n          </tr>\n          <tr>\n            <td>\n              <a href='/api_doc/v1/tutors/destroy.en.html'>DELETE /api/v1/tutors/signout</a>\n            </td>\n            <td width='60%'>signout the tutor, clean the device token</td>\n          </tr>\n    </tbody>\n  </table>\n\n\n        \n      </div>\n    </div>\n    <hr>\n    <footer></footer>\n  </div>\n  <script type='text/javascript' src='/api_doc/javascripts/bundled/jquery.js'></script>\n<script type='text/javascript' src='/api_doc/javascripts/bundled/bootstrap-collapse.js'></script>\n<script type='text/javascript' src='/api_doc/javascripts/bundled/prettify.js'></script>\n<script type='text/javascript' src='/api_doc/javascripts/apipie.js'></script>\n</body>\n</html>\n",
+      "code": 200,
+      "show_in_doc": 0,
+      "recorded": true
+    }
+  ],
+  "application#hello": [
+    {
+      "verb": "GET",
+      "path": "/",
+      "versions": [
+
+      ],
+      "query": null,
+      "request_data": null,
+      "response_data": "hello, world!",
+      "code": 200,
+      "show_in_doc": 0,
+      "recorded": true
+    }
+  ],
+  "application#invalid_api": [
+    {
+      "verb": "GET",
+      "path": "/favicon.ico",
+      "versions": [
+
+      ],
+      "query": null,
+      "request_data": null,
+      "response_data": "API not found",
+      "code": 404,
+      "show_in_doc": 0,
+      "recorded": true
+    },
+    {
+      "verb": "GET",
+      "path": "/abc",
+      "versions": [
+
+      ],
+      "query": null,
+      "request_data": null,
+      "response_data": "API not found",
+      "code": 404,
+      "show_in_doc": 0,
+      "recorded": true
+    }
+  ],
   "students#activate_account": [
     {
       "verb": "POST",

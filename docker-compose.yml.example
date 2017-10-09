@@ -22,6 +22,8 @@ services:
   web:
     build: .
     command: bundle exec rails s -p 3000 -b '0.0.0.0'
+    env_file:
+      - '.env'
     volumes:
       - .:/TalkWithSam
     ports:
@@ -29,22 +31,22 @@ services:
     depends_on:
       - postgres
       - sidekiq
-      - test
-  test:
-    build: .
-    command: bundle exec rake spec
-    volumes:
-      - .:/TalkWithSam
-    depends_on:
-      - postgres
-      - sidekiq
-  apipie_test:
-    build: .
-    command: bundle exec rake spec
-    env_file:
-      - '.env'
-    volumes:
-      - .:/TalkWithSam
-    depends_on:
-      - postgres
-      - sidekiq
+      # - test
+  # test:
+  #   build: .
+  #   command: bundle exec rake spec
+  #   volumes:
+  #     - .:/TalkWithSam
+  #   depends_on:
+  #     - postgres
+  #     - sidekiq
+  # apipie_test:
+  #   build: .
+  #   command: bundle exec rake spec
+  #   env_file:
+  #     - '.env'
+  #   volumes:
+  #     - .:/TalkWithSam
+  #   depends_on:
+  #     - postgres
+  #     - sidekiq

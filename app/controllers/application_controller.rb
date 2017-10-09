@@ -6,8 +6,7 @@ class ApplicationController < ActionController::API
   end
 
   def hello
-    #debug
-    render text: 'hello, world!'
+    render :json => 'hello, world!', :status => :ok
   end
 
   # get the server address
