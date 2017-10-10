@@ -7,13 +7,13 @@ RSpec.describe MessageBroadcastJob, type: :job do
   let(:tutor) { create(:tutor) }
   subject(:job) { MessageBroadcastJob.perform_later(
                     { message: 'test message' }, 'notification',
-                    student_id = student.id, tutor_id = tutor.id) }
+                    student_id: student.id, tutor_id: tutor.id) }
 
   it 'send notification to student and tutor' do
     expect{ job }.to have_enqueued_job.on_queue("message")
     expect(MessageBroadcastJob).to have_been_enqueued.with(
       { message: 'test message' }, 'notification', 
-      student_id = student.id, tutor_id = tutor.id
+      student_id: student.id, tutor_id: tutor.id
     )
   end
 

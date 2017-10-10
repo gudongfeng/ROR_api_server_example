@@ -34,7 +34,7 @@ class MakeCallJob < ApplicationJob
     # Send conference room connection info to both tutor and student
     infos = { token: token.to_jwt, room_name: room_name }
     MessageBroadcastJob.perform_later(infos, 'join_conference',
-                                      student_id = student_id,
-                                      tutor_id = tutor_id)
+                                      student_id: student_id,
+                                      tutor_id: tutor_id)
   end
 end
