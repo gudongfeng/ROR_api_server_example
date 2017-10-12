@@ -4,10 +4,10 @@ class MessageBroadcastJob < ApplicationJob
   # Broadcast message to student or tutor
   #
   # Args
-  #   message: message content
-  #   type:    message type ('error', 'join_conference', 'notification', 'comming_request')
-  #   student_id: student id
-  #   tutor_id:   tutor id
+  #   message: String/Hash, message content
+  #   type:    String, message type ('error', 'join_conference',
+  #                                  'notification', 'comming_request')
+  #   ids:     Hash, example: { student_id: <id>, tutor_id: <id> } 
   def perform(message, type, **ids)
     types = ['error', 'notification', 'join_conference', 'comming_request']
     if types.include?(type)
