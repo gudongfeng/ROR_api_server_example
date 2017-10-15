@@ -1,10 +1,7 @@
 class ApplicationController < ActionController::API
   before_action :set_locale
 
-  def invalid_api
-    render :json => I18n.t('not_found'), :status => :not_found
-  end
-
+  # ROOT page
   def hello
     render :json => 'hello, world!', :status => :ok
   end

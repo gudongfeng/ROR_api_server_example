@@ -1,0 +1,20 @@
+{
+  "name": "cable_client",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "bufferutil": "^3.0.2",
+    "commander": "^2.11.0",
+    "inquirer": "^3.3.0",
+    "twilio-video": "^1.5.0",
+    "utf-8-validate": "^3.0.3",
+    "ws": "^3.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "dongfeng gu",
+  "license": "MIT"
+}

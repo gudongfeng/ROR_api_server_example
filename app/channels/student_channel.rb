@@ -24,13 +24,13 @@ class StudentChannel < ApplicationCable::Channel
         message = { student_id: current_user.id, plan_id: data['plan_id'] }
         MessageBroadcastJob.perform_later(message,
                                           'comming_request',
-                                          tutor_id = tutor_id)
+                                          tutor_id: tutor_id)
       end
     else
       # tutor is not available
       MessageBroadcastJob.perform_later(
         I18n.t('students.errors.appointment.busy'),
-        'error', student_id = current_user.id)
+        'error', student_id: current_user.id)
     end
   end
 end

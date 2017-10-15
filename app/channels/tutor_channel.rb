@@ -1,4 +1,5 @@
 class TutorChannel < ApplicationCable::Channel
+  # Tutor go online
   def subscribed
     stream_from "tutor_#{current_user.id}"
     # Add the tutor to the online queue
@@ -18,9 +19,10 @@ class TutorChannel < ApplicationCable::Channel
   #   data['response'](mandatory):   tutor response result
   #   data['message']['student_id']: request student id
   #   data['message']['plan_id']:    request plan id
-  def response(data) 
+  def response(data)
     if data['response'] == 'accept'
       tutor_id   = current_user.id
+      puts data
       student_id = data['message']['student_id']
       plan_id    = data['message']['plan_id']
 
@@ -36,8 +38,8 @@ class TutorChannel < ApplicationCable::Channel
       msg = I18n.t('appointment.conference_room.call_delay',
                    time: Settings.call_delay_time)
       MessageBroadcastJob.perform_later(msg, 'notification',
-                                        student_id = student_id,
-                                        tutor_id = tutor_id)
+                                        student_id: student_id,
+                                        tutor_id: tutor_id)
       # Notify the tutor and student before the call end
       call_length       = Settings.instance_eval("call_length_plan_#{plan_id}")
       call_end_reminder = Settings.call_speak_reminder_time
@@ -45,8 +47,8 @@ class TutorChannel < ApplicationCable::Channel
                    time: call_end_reminder)
       MessageBroadcastJob.set(wait: call_length - call_end_reminder)
                          .perform_later(msg, 'notification',
-                                        student_id = student_id,
-                                        tutor_id = tutor_id)
+                                        student_id: student_id,
+                                        tutor_id: tutor_id)
       # Terminate the conference room in serveral mins
       CompleteCallJob.set(wait: call_length).perform_later(appointment.id)
     else

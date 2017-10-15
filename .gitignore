@@ -33,7 +33,6 @@ vendor/bundle
 config/settings.local.yml
 config/settings/*.local.yml
 config/environments/*.local.yml
-log/
 
 vendor
 # Remove the test coverage
@@ -41,7 +40,7 @@ coverage
 dump.rdb
 .vscode
 
-cable_client
+/app/cable_client/node_modules/*
 *DS_Store*
 
 

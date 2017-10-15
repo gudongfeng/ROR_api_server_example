@@ -15,7 +15,7 @@ class CompleteCallJob < ApplicationJob
     # Notifiy both student and tutor that the conference room terminated
     msg = I18n.t('appointment.conference_room.call_terminated')
     MessageBroadcastJob.perform_later(msg, 'notification',
-                                      student_id = appointment.student_id,
-                                      tutor_id = appointment.tutor_id)
+                                      student_id: appointment.student_id,
+                                      tutor_id: appointment.tutor_id)
   end
 end
