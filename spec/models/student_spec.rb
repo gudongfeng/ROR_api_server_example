@@ -37,13 +37,6 @@ RSpec.describe Core::Student, type: :model do
       expect(student.errors.details[:gender]).to \
         include({:error => :inclusion, :value => 'invalid'})
     end
-
-    it 'fails with invalid state' do
-      student.state = 'invalid'
-      student.save
-      expect(student.errors.details[:state]).to \
-        include({ :error => :inclusion, :value => 'invalid'})
-    end
   end
 
   describe '#Function' do

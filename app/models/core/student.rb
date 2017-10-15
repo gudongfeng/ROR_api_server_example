@@ -40,9 +40,6 @@ module Core
     validates :gender, inclusion: {in: %w(male female)}, presence: true
     validates :country_code, inclusion: {in: [1, 86]}, presence: true
     validates :picture, presence: true
-    validates :state, presence: true,
-              # TODO : need to add more state to the student
-              inclusion: { in: %w(available unavailable) }
 
     # ==========================================================================
     # STUDENT FUNCTIONS
@@ -84,12 +81,6 @@ module Core
     # Student can set his/her pritorized tutor
     def set_prioritized_tutor(tutor_id)
       update_attributes(prioritized_tutor: tutor_id)
-    end
-
-    # (updated) Student can change his/her state
-    def change_state(state)
-      return false if state.blank?
-      return update_attributes(state: state)
     end
 
     # Find a tutor that this student likes
@@ -207,38 +198,6 @@ module Core
       end
     end
 
-    # (updated) get the current status 
-    def get_current_status
-      appointment = -1
-      request = nil
-      request = Core::Request.find(self.current_request) unless self.current_request.nil?
-      if request
-        if request.appointment_id
-          appointment = request.appointment_id
-        end
-      end
-
-      # Check whether the local time is within the tutor online time range
-      hour = Time.now.in_time_zone('Asia/Shanghai').hour
-      message = nil
-      if !(Settings.tutor_start_time..Settings.tutor_end_time).include? hour
-        message = I18n.t 'success.messages.t_online_reminder'
-      end
-
-      temp = {
-          state: self.state,
-          session_id: self.session_count,
-          prioritized_tutor: self.prioritized_tutor,
-          current_request: self.current_request,
-          appointment_id: appointment,
-      }
-
-      if message
-        temp['message'] = message
-      end
-
-      return temp
-    end
 
     # clean the verification code
     def clear_verification_code

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170809185231) do
+ActiveRecord::Schema.define(version: 20171015190307) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -150,11 +150,7 @@ ActiveRecord::Schema.define(version: 20170809185231) do
     t.string "reset_digest"
     t.datetime "reset_sent_at"
     t.integer "session_count", default: 1
-    t.integer "prioritized_tutor"
-    t.string "state"
-    t.string "remark1"
     t.string "device_token"
-    t.integer "current_request"
     t.string "picture"
     t.string "verification_code"
     t.integer "country_code"
@@ -181,8 +177,6 @@ ActiveRecord::Schema.define(version: 20170809185231) do
     t.string "reset_digest"
     t.datetime "reset_sent_at"
     t.string "device_token"
-    t.integer "current_request"
-    t.string "tutor_timer_job_id"
     t.integer "level"
     t.string "gender"
     t.integer "country_code"
