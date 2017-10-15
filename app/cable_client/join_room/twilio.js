@@ -5,9 +5,10 @@ var Video = require('twilio-video');
 
 var activeRoom;
 var previewTracks;
-var identity = 'dongfeng';
+var identity = 'username';
 var roomName;
-var token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImN0eSI6InR3aWxpby1mcGE7dj0xIn0.eyJqdGkiOiJTSzBkNDNmYWIyMGY3ZjRjNDJlNjAxYWNlOGJmMjQwNzZjLTE1MDc3ODI0NzYiLCJncmFudHMiOnsiaWRlbnRpdHkiOiJkYzVmMDQ4OWJkZjhlNmYzZWU0NjQyZGIzY2UxN2RkZTE1MDQwMzg4N2E0MzE1MTQwZjI0OWIzMjkyZDVkNWIyZDg0NjExZDNiZjQ2MTAxY2FiMDMzYTk4ZDcyODlkZTUzODBlY2VhOWMyNTlkYzAyOGRhMDk1YWRjYjFkMjkyOSIsInZpZGVvIjp7InJvb20iOiJ2ZWxqY2dka2Nwb2hocW9va2hzenF3b2R2bXhsZ2ZpdmNqdHl5eXBqaWhxZGZvaHd4biJ9fSwiaXNzIjoiU0swZDQzZmFiMjBmN2Y0YzQyZTYwMWFjZThiZjI0MDc2YyIsIm5iZiI6MTUwNzc4MjQ3NiwiZXhwIjoxNTA3Nzg2MDc2LCJzdWIiOiJBQzk2NGRjZGM3MDFjYzA5ZGIxYTg1MDQxZDY1ZmI4MGIyIn0.A-PDuyzvAtZtyqWz9R4197asHxdqoYMG7S1Tuus_j9g';
+var roomToken;
+
 
 // Attach the Tracks to the DOM.
 function attachTracks(tracks, container) {
@@ -47,7 +48,8 @@ document.getElementById('room-controls').style.display = 'block';
 // Bind button to join Room.
 document.getElementById('button-join').onclick = function() {
   roomName = document.getElementById('room-name').value;
-  if (!roomName) {
+  roomToken = document.getElementById('room-token').value;
+  if (!roomName || !roomToken) {
     alert('Please enter a room name.');
     return;
   }
@@ -64,7 +66,7 @@ document.getElementById('button-join').onclick = function() {
 
   // Join the Room with the token from the server and the
   // LocalParticipant's Tracks.
-  Video.connect(token, connectOptions).then(roomJoined, function(error) {
+  Video.connect(roomToken, connectOptions).then(roomJoined, function(error) {
     log('Could not connect to Twilio: ' + error.message);
   });
 };
@@ -182,7 +184,7 @@ module.exports={
         "spec": ">=0.7.6 <0.8.0",
         "type": "range"
       },
-      "/Users/dgu/Desktop/video-quickstart-js/node_modules/twilio-video"
+      "/Users/dgu/Documents/projects/personal_project/api_server/app/cable_client/node_modules/twilio-video"
     ]
   ],
   "_from": "@twilio/sip.js@>=0.7.6 <0.8.0",
@@ -216,7 +218,7 @@ module.exports={
   "_shasum": "9186c69736b2ec092c00791087b0a7868975c14c",
   "_shrinkwrap": null,
   "_spec": "@twilio/sip.js@^0.7.6",
-  "_where": "/Users/dgu/Desktop/video-quickstart-js/node_modules/twilio-video",
+  "_where": "/Users/dgu/Documents/projects/personal_project/api_server/app/cable_client/node_modules/twilio-video",
   "author": {
     "name": "OnSIP",
     "email": "developer@onsip.com",
@@ -14279,7 +14281,7 @@ module.exports={
         "spec": ">=1.0.0 <2.0.0",
         "type": "range"
       },
-      "/Users/dgu/Desktop/video-quickstart-js/node_modules/twilio-video"
+      "/Users/dgu/Documents/projects/personal_project/api_server/app/cable_client/node_modules/twilio-video"
     ]
   ],
   "_from": "@twilio/webrtc@>=1.0.0 <2.0.0",
@@ -14313,7 +14315,7 @@ module.exports={
   "_shasum": "aba30129439593220808a9c467310abfc17ce1a3",
   "_shrinkwrap": null,
   "_spec": "@twilio/webrtc@^1.0.0",
-  "_where": "/Users/dgu/Desktop/video-quickstart-js/node_modules/twilio-video",
+  "_where": "/Users/dgu/Documents/projects/personal_project/api_server/app/cable_client/node_modules/twilio-video",
   "author": {
     "name": "Manjesh Malavalli",
     "email": "mmalavalli@twilio.com"
@@ -25636,18 +25638,18 @@ module.exports={
   "_args": [
     [
       {
-        "raw": "twilio-video@^1.3.0",
+        "raw": "twilio-video",
         "scope": null,
         "escapedName": "twilio-video",
         "name": "twilio-video",
-        "rawSpec": "^1.3.0",
-        "spec": ">=1.3.0 <2.0.0",
-        "type": "range"
+        "rawSpec": "",
+        "spec": "latest",
+        "type": "tag"
       },
-      "/Users/dgu/Desktop/video-quickstart-js/quickstart/src"
+      "/Users/dgu/Documents/projects/personal_project/api_server/app/cable_client"
     ]
   ],
-  "_from": "twilio-video@>=1.3.0 <2.0.0",
+  "_from": "twilio-video@latest",
   "_id": "twilio-video@1.5.0",
   "_inCache": true,
   "_location": "/twilio-video",
@@ -25661,15 +25663,18 @@ module.exports={
     "email": "markandrusroberts@gmail.com"
   },
   "_npmVersion": "4.2.0",
-  "_phantomChildren": {},
+  "_phantomChildren": {
+    "safe-buffer": "5.0.1",
+    "ultron": "1.1.0"
+  },
   "_requested": {
-    "raw": "twilio-video@^1.3.0",
+    "raw": "twilio-video",
     "scope": null,
     "escapedName": "twilio-video",
     "name": "twilio-video",
-    "rawSpec": "^1.3.0",
-    "spec": ">=1.3.0 <2.0.0",
-    "type": "range"
+    "rawSpec": "",
+    "spec": "latest",
+    "type": "tag"
   },
   "_requiredBy": [
     "#USER",
@@ -25678,8 +25683,8 @@ module.exports={
   "_resolved": "https://registry.npmjs.org/twilio-video/-/twilio-video-1.5.0.tgz",
   "_shasum": "286f1c9cd051a636bafc43b6a9a48aab2c0211c7",
   "_shrinkwrap": null,
-  "_spec": "twilio-video@^1.3.0",
-  "_where": "/Users/dgu/Desktop/video-quickstart-js/quickstart/src",
+  "_spec": "twilio-video",
+  "_where": "/Users/dgu/Documents/projects/personal_project/api_server/app/cable_client",
   "author": {
     "name": "Mark Andrus Roberts",
     "email": "mroberts@twilio.com"

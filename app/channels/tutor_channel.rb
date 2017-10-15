@@ -22,6 +22,7 @@ class TutorChannel < ApplicationCable::Channel
   def response(data)
     if data['response'] == 'accept'
       tutor_id   = current_user.id
+      puts data
       student_id = data['message']['student_id']
       plan_id    = data['message']['plan_id']
 

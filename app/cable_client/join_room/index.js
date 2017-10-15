@@ -4,9 +4,10 @@ var Video = require('twilio-video');
 
 var activeRoom;
 var previewTracks;
-var identity = 'dongfeng';
+var identity = 'username';
 var roomName;
-var token = 'invalidtoken';
+var roomToken;
+
 
 // Attach the Tracks to the DOM.
 function attachTracks(tracks, container) {
@@ -46,7 +47,8 @@ document.getElementById('room-controls').style.display = 'block';
 // Bind button to join Room.
 document.getElementById('button-join').onclick = function() {
   roomName = document.getElementById('room-name').value;
-  if (!roomName) {
+  roomToken = document.getElementById('room-token').value;
+  if (!roomName || !roomToken) {
     alert('Please enter a room name.');
     return;
   }
@@ -63,7 +65,7 @@ document.getElementById('button-join').onclick = function() {
 
   // Join the Room with the token from the server and the
   // LocalParticipant's Tracks.
-  Video.connect(token, connectOptions).then(roomJoined, function(error) {
+  Video.connect(roomToken, connectOptions).then(roomJoined, function(error) {
     log('Could not connect to Twilio: ' + error.message);
   });
 };
