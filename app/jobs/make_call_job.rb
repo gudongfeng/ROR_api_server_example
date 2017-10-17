@@ -22,7 +22,9 @@ class MakeCallJob < ApplicationJob
     
     # Create a room and save the room id to appointment
     room_name = (0...50).map { ('a'..'z').to_a[rand(26)] }.join
-    room = client.video.rooms.create(unique_name: room_name)
+    room = client.video.rooms.create(unique_name: room_name,
+                                     record_participants_on_connect: true,
+                                     type: 'group')
     Core::Appointment.find(appointment_id)
                      .update_attribute(:conference_name, room.sid)
 

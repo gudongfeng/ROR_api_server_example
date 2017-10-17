@@ -53,8 +53,7 @@ module Core
 
     def to_json(options={})
       options[:except] ||= [:password_digest, :created_at, :updated_at,
-                            :activated, :activated_at, :activation_digest, 
-                            :reset_digest, :reset_sent_at]
+                            :activated, :activated_at]
       super(options)
     end
 

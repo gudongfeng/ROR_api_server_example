@@ -322,9 +322,11 @@ class Api::V1::StudentsController < Api::ApiController
   # (Updated) Only get the require information for student register
   def student_signup_params
     params[:student][:balance] = 0
+    params[:student][:state] = 'offline'
     params.require(:student).permit(:name, :password, :email, :gender,
                                     :password_confirmation, :balance,
-                                    :phoneNumber, :picture, :country_code)
+                                    :phoneNumber, :picture, :country_code,
+                                    :state)
   end
 
   # (Updated) Only get the required information for the tutor editing

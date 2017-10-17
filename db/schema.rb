@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171015190307) do
+ActiveRecord::Schema.define(version: 20171016231722) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -26,23 +26,14 @@ ActiveRecord::Schema.define(version: 20171015190307) do
     t.text "student_feedback"
     t.text "tutor_feedback"
     t.string "pay_state", default: "unpaid"
-    t.string "order_no"
     t.string "conference_name"
     t.integer "tutor_rating"
-    t.string "student_call_uuid"
-    t.string "tutor_call_uuid"
-    t.string "student_sidekiq_job_id"
-    t.string "tutor_sidekiq_job_id"
-    t.string "hard_worker"
-    t.string "call_hangup"
     t.integer "plan_id"
     t.decimal "tutor_earned", precision: 8, scale: 2
     t.bigint "discount_id"
-    t.integer "student_call_duration"
-    t.integer "tutor_call_duration"
     t.decimal "amount", precision: 8, scale: 2
+    t.string "complete_call_jid"
     t.index ["discount_id"], name: "index_appointments_on_discount_id"
-    t.index ["order_no"], name: "index_appointments_on_order_no", unique: true
     t.index ["student_id"], name: "index_appointments_on_student_id"
     t.index ["tutor_id"], name: "index_appointments_on_tutor_id"
   end
@@ -147,14 +138,13 @@ ActiveRecord::Schema.define(version: 20171015190307) do
     t.decimal "balance", precision: 8, scale: 2
     t.boolean "activated", default: false
     t.datetime "activated_at"
-    t.string "reset_digest"
-    t.datetime "reset_sent_at"
     t.integer "session_count", default: 1
     t.string "device_token"
     t.string "picture"
     t.string "verification_code"
     t.integer "country_code"
     t.string "gender"
+    t.string "state"
     t.index ["email"], name: "index_students_on_email", unique: true
     t.index ["phoneNumber"], name: "index_students_on_phoneNumber", unique: true
   end
@@ -171,11 +161,8 @@ ActiveRecord::Schema.define(version: 20171015190307) do
     t.text "description"
     t.decimal "balance", precision: 8, scale: 2
     t.string "phoneNumber"
-    t.string "activation_digest"
     t.boolean "activated", default: false
     t.datetime "activated_at"
-    t.string "reset_digest"
-    t.datetime "reset_sent_at"
     t.string "device_token"
     t.integer "level"
     t.string "gender"

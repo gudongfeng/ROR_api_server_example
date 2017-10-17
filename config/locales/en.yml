@@ -15,6 +15,7 @@ en:
       call_delay: conference room will start in %{time} seconds
       call_end: conference room will end in %{time} seconds
       call_terminated: conference room has been terminated
+      call_extend: conference room has been extended for %{time} seconds
   students:
     create:
       success: successfully sign up
@@ -37,6 +38,7 @@ en:
         invalid: invalid verification code
       appointment:
         busy: tutor is busy, please try again later
+        call_extend: fail to extend conference room
   tutors:
     create:
       success: successfully sign up
@@ -57,6 +59,8 @@ en:
       verification_code:
         missing: verification code has not been found
         invalid: invalid verification code
+      appointment:
+        occupied: request has been accepted or canceled
   requests:
     errors:
       save: save request error

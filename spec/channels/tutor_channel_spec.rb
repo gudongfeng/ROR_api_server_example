@@ -21,6 +21,8 @@ RSpec.describe TutorChannel, type: :channel do
   end
 
   it "accepts a request" do
+    # Change the student state to requesting
+    student.change_state('requesting')
     @channel.perform_action(data)
     expect(Core::Appointment.count).to eq 1
   end

@@ -24,6 +24,18 @@ class TutorChannel < ApplicationCable::Channel
       tutor_id   = current_user.id
       student_id = data['message']['student_id']
       plan_id    = data['message']['plan_id']
+      
+      # Check if the request have been accepted or cancel.
+      student = Core::Student.find(student_id)
+      if student.state != 'requesting'
+        # Notify the tutor that request has been cancel or accepted
+        msg = I18n.t('tutors.appointment.occupied')
+        MessageBroadcastJob.perform_later(msg, 'notification', tutor_id: tutor_id)
+        return
+      else
+        # Keep going, change the student state
+        student.change_state('meeting')
+      end
 
       # Create an appointment
       appointment = current_user.appointments
@@ -49,7 +61,11 @@ class TutorChannel < ApplicationCable::Channel
                                         student_id: student_id,
                                         tutor_id: tutor_id)
       # Terminate the conference room in serveral mins
-      CompleteCallJob.set(wait: call_length).perform_later(appointment.id)
+      job = CompleteCallJob.set(wait: call_length).perform_later(appointment.id)
+      # Store the jid for the complete call job for later usage.
+      jid = job.provider_job_id
+      appointment.update_attribute(:complete_call_jid, jid)
+
     else
       current_user.update_attribute(:decline_count,
                                     current_user.decline_count + 1)
