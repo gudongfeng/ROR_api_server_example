@@ -56,16 +56,16 @@ class TutorChannel < ApplicationCable::Channel
       call_end_reminder = Settings.call_speak_reminder_time
       msg = I18n.t('appointment.conference_room.call_end',
                    time: call_end_reminder)
-      MessageBroadcastJob.set(wait: call_length - call_end_reminder)
-                         .perform_later(msg, 'notification',
-                                        student_id: student_id,
-                                        tutor_id: tutor_id)
+      job_reminder = MessageBroadcastJob.set(wait: call_length - call_end_reminder)
+                               .perform_later(msg, 'notification',
+                                               student_id: student_id,
+                                               tutor_id: tutor_id)
       # Terminate the conference room in serveral mins
-      job = CompleteCallJob.set(wait: call_length).perform_later(appointment.id)
+      job_complete = CompleteCallJob.set(wait: call_length).perform_later(appointment.id)
       # Store the jid for the complete call job for later usage.
-      jid = job.provider_job_id
-      appointment.update_attribute(:complete_call_jid, jid)
-
+      jid_reminder = job_reminder.provider_job_id
+      jid_complete = job_complete.provider_job_id
+      appointment.update_attribute(:jids, jid_reminder + '|' + jid_complete)
     else
       current_user.update_attribute(:decline_count,
                                     current_user.decline_count + 1)

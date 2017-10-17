@@ -51,25 +51,26 @@ class StudentChannel < ApplicationCable::Channel
   end
 
   # Student extends the call
-  #
-  # Args:
-  #   data['job_id']: the job id of sidekiq worker
-  def extend(data)
+  def extend()
     # Get the appointment
     appointment = current_user.appointments.last
     student_id  = current_user.id
     tutor_id    = appointment.tutor.id
     # Get the sidekiq job
-    job         = Sidekiq::ScheduledSet.new.find_job(data['job_id'])
-    new_time    = job.at + Settings.call_extend_time
+    jids = appointment.jids.split('|')
+    jid_reminder = jids[0]
+    jid_complete = jids[1]
+    job_reminder = Sidekiq::ScheduledSet.new.find_job(jid_reminder)
+    job_complete = Sidekiq::ScheduledSet.new.find_job(jid_complete)
+    complete_new_time = job_complete.at + Settings.call_extend_time
+    reminder_new_time = complete_new_time - Settings.call_speak_reminder_time
 
-    if job.reschedule(new_time)
+    if job_complete.reschedule(complete_new_time) &&
+       job_reminder.reschedule(reminder_new_time)
       # update the appointment cost and call time
-      appointment.update_attributes(:amount => (appointment.amount +
-                                                Settings.call_extend_cost),
-                                    :tutor_earned => (appointment.tutor_earned +
-                                                      Settings.call_extend_earned))
-      # TODO: notify the student and the tutor
+      appointment.update_attribute(:amount, appointment.amount + Settings.call_extend_cost)
+      appointment.update_attribute(:tutor_earned, appointment.tutor_earned + Settings.call_extend_earned)
+      # notify the student and the tutor
       msg = I18n.t('appointment.conference_room.call_extend', 
                    time: Settings.call_extend_time)
       MessageBroadcastJob.perform_later(msg, 'notification',

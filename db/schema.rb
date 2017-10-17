@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171016231722) do
+ActiveRecord::Schema.define(version: 20171017194148) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -32,7 +32,7 @@ ActiveRecord::Schema.define(version: 20171016231722) do
     t.decimal "tutor_earned", precision: 8, scale: 2
     t.bigint "discount_id"
     t.decimal "amount", precision: 8, scale: 2
-    t.string "complete_call_jid"
+    t.string "jids"
     t.index ["discount_id"], name: "index_appointments_on_discount_id"
     t.index ["student_id"], name: "index_appointments_on_student_id"
     t.index ["tutor_id"], name: "index_appointments_on_tutor_id"
