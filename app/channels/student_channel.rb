@@ -26,8 +26,8 @@ class StudentChannel < ApplicationCable::Channel
     if !tutors.empty?
       # broadcast the student request to tutors
       for tutor_id in tutors
-        message = { student_id: current_user.id, plan_id: data['plan_id'] }
-        MessageBroadcastJob.perform_later(message,
+        msg = { student_id: current_user.id, plan_id: data['plan_id'] }
+        MessageBroadcastJob.perform_later(msg,
                                           'comming_request',
                                           tutor_id: tutor_id)
       end
@@ -41,12 +41,15 @@ class StudentChannel < ApplicationCable::Channel
     end
   end
 
-  # TODO: Student cancel the request
+  # Student cancel the request
   def cancel()
     if current_user.state == 'requesting'
       current_user.change_state('online')
     else
       # Notify student that he is not in requesting state
+      msg = I18n.t('students.errors.appointment.cancel')
+      MessageBroadcastJob.perform_later(msg, 'error',
+                                        student_id: current_user.id)
     end
   end
 

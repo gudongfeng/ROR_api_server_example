@@ -29,8 +29,10 @@ class TutorChannel < ApplicationCable::Channel
       student = Core::Student.find(student_id)
       if student.state != 'requesting'
         # Notify the tutor that request has been cancel or accepted
-        msg = I18n.t('tutors.appointment.occupied')
+        msg = I18n.t('tutors.errors.appointment.occupied')
         MessageBroadcastJob.perform_later(msg, 'notification', tutor_id: tutor_id)
+        # Add the tutor back to queue
+        TutorOnlineQueue.instance.push(tutor_id)
         return
       else
         # Keep going, change the student state

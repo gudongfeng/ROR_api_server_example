@@ -39,6 +39,7 @@ en:
       appointment:
         busy: tutor is busy, please try again later
         call_extend: fail to extend conference room
+        cancel: request is invalid or has been processed
   tutors:
     create:
       success: successfully sign up
@@ -61,9 +62,6 @@ en:
         invalid: invalid verification code
       appointment:
         occupied: request has been accepted or canceled
-  requests:
-    errors:
-      save: save request error
   error:
     model:
       number:             "only allow number"
