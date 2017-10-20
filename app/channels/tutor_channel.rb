@@ -67,7 +67,7 @@ class TutorChannel < ApplicationCable::Channel
       # Store the jid for the complete call job for later usage.
       jid_reminder = job_reminder.provider_job_id
       jid_complete = job_complete.provider_job_id
-      appointment.update_attribute(:jids, jid_reminder + '|' + jid_complete)
+      appointment.update_attribute(:jids, jid_reminder.to_s + '|' + jid_complete.to_s)
     else
       current_user.update_attribute(:decline_count,
                                     current_user.decline_count + 1)
