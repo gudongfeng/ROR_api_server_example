@@ -81,9 +81,7 @@ class Api::V1::StudentsController < Api::ApiController
     param :email, String, :desc => 'student email'
     param :device_token, String, :desc => 'device token'
     param :picture, String, :desc => 'student picture url'
-    param :prioritized_tutor, Integer, :desc => 'student favourate tutor id'
     param :gender, ['male', 'female'], :desc => 'student gender'
-    param :state, ['available', 'unavailable'], :desc => 'options: available unavailable'
   end
   header 'Authorization', "authentication token has to be passed as part
     of the request.", required: true
@@ -166,16 +164,6 @@ class Api::V1::StudentsController < Api::ApiController
     render_message(I18n.t 'students.send_verification_code.success')
   end
 
-  # Get student status
-  api :GET, '/students/status', 'get the student status'
-  header 'Authorization', "authentication token has to be passed as part
-   of the request.", required: true
-  error 401, 'unauthorized, account not found'
-  error 412, 'account not activate'
-  def get_status
-    render :json => current_student.get_current_status, :status => :ok
-  end
-
   # Student signout
   api :DELETE, '/students/signout', 'signout students, clean the device token'
   header 'Authorization', "authentication token has to be passed as part
@@ -191,12 +179,6 @@ class Api::V1::StudentsController < Api::ApiController
     end
   end
 
-  # (This is a test for action cable function)
-  def send_messages 
-    ActionCable.server.broadcast 'messages',
-      message: 'test messages from actioncable broadcasting'
-    head :ok
-  end
 
 ################################################################################ 
 # Following code Need to be updated
@@ -228,63 +210,6 @@ class Api::V1::StudentsController < Api::ApiController
           end
         else
           json_error_message 400, (I18n.t 'error.messages.unpaid_appointment')
-        end
-      else
-        json_error_message 401, (I18n.t 'error.messages.login')
-      end
-    else
-      json_error_message 400, (I18n.t 'error.messages.parameters')
-    end
-  end
-
-  # This student is now looking for a tutor
-  def request_look_for_tutors
-    if params && params[:plan_id]
-      if @student && @student.remember_expiry > Time.now
-        # change the student state to matching
-        @student.change_state 'matching' if @student.state.eql? 'available'
-        # whenever the student start a new request the session counter will increase by one
-        @student.increment!(:session_count)
-        # student start to look for a tutor
-        params[:topic_id] = 1;
-        rv = @student.request_look_for_tutors params[:topic_id], params[:plan_id]
-        if rv == 'success'
-          # begin the timer for 90 seconds search period
-          job_id = RequestCancelWorker.perform_in((Settings.Reservation.look_for_tutor_time +
-              Settings.Reservation.delta)
-                                                      .seconds, @student.id, @student.session_count)
-          # save job id to db
-          @student.update_attributes(remark1: job_id)
-          render :json => {:message => (I18n.t 'success.messages.request')},
-                 :status => 200
-        else
-          # change the student states back to available if it fails to request a tutor
-          @student.change_state 'available'
-          json_error_message 409, (I18n.t 'error.messages.request', reason: rv)
-        end
-      else
-        json_error_message 401, (I18n.t 'error.messages.login')
-      end
-    else
-      json_error_message 400, (I18n.t 'error.messages.parameters')
-    end
-  end
-
-  # This student is now looking for a prioritized tutor
-  def request_look_for_prioritized_tutor
-    if params && params[:plan_id]
-      if @student && @student.remember_expiry > Time.now
-        # change the student state to matching
-        @student.change_state 'matching' if @student.state.eql? 'available'
-        # student start to look for prioritized tutor
-        params[:topic_id] = 1;
-        rv = @student.request_look_for_prioritized_tutor params[:topic_id], params[:plan_id]
-        if rv == 'success'
-          render :json => {:message => (I18n.t 'success.messages.request')},
-                 :status => 200
-        else
-          @student.change_state 'available' if @student.state.eql? 'matching'
-          json_error_message 409, (I18n.t 'error.messages.request', reason: rv)
         end
       else
         json_error_message 401, (I18n.t 'error.messages.login')
@@ -397,7 +322,7 @@ class Api::V1::StudentsController < Api::ApiController
   # (Updated) Only get the require information for student register
   def student_signup_params
     params[:student][:balance] = 0
-    params[:student][:state] = 'available'
+    params[:student][:state] = 'offline'
     params.require(:student).permit(:name, :password, :email, :gender,
                                     :password_confirmation, :balance,
                                     :phoneNumber, :picture, :country_code,
@@ -406,9 +331,8 @@ class Api::V1::StudentsController < Api::ApiController
 
   # (Updated) Only get the required information for the tutor editing
   def student_edit_params
-    params.require(:student).permit(:email, :name, :prioritized_tutor,
-                                    :device_token, :picture, :gender,
-                                    :state)
+    params.require(:student).permit(:email, :name, :device_token, 
+                                    :picture, :gender)
   end
 
   def tutor_state_params

@@ -24,7 +24,7 @@ FactoryGirl.define do
 
   factory :education, :class => Core::Education do
     sequence(:id) { |n| "#{n}" }
-    school 'test schoold'
+    school 'test school'
     major 'test major'
     degree 'bachelor'
     start_time { 1.week.ago }

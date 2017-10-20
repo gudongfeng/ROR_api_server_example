@@ -188,26 +188,6 @@ RSpec.describe Api::V1::StudentsController, type: :controller do
     end
   end
 
-  describe 'GET #get_status' do
-    let(:student) { create(:student) }
-  
-    it 'success', :show_in_doc do
-      get :get_status
-      expect(response).to have_http_status :ok
-      expect(json).to eq student.get_current_status.as_json
-    end
-
-    it 'fail with invalid header information', :skip_token do
-      get :get_status
-      expect(response).to have_http_status :unauthorized
-    end
-
-    it 'fail with inactivate account', :skip_activation do
-      get :get_status
-      expect(response).to have_http_status :precondition_failed
-    end
-  end
-
   describe 'DELETE #destroy' do
     let(:student) { create(:student) }
 

@@ -5,8 +5,8 @@ FactoryGirl.define do
     country_code 1
     sequence(:name) { |n| "student#{n}" }
     sequence(:email) { |n| "student#{n}@example.com" }
-    state 'available'
     gender 'male'
+    state 'offline'
     password "123456"
     picture "http://example.com"
     verification_code 4567

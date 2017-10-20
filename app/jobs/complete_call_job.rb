@@ -10,12 +10,19 @@ class CompleteCallJob < ApplicationJob
 
     appointment = Core::Appointment.find(appointment_id)
     room_sid = appointment.conference_name
-    room = client.video.rooms(room_sid).update(status: 'completed')
+    begin
+      client.video.rooms(room_sid).update(status: 'completed')
+    rescue Twilio::REST::RestError
+      # Skip the error
+    end
+
     
     # Notifiy both student and tutor that the conference room terminated
     msg = I18n.t('appointment.conference_room.call_terminated')
     MessageBroadcastJob.perform_later(msg, 'notification',
                                       student_id: appointment.student_id,
                                       tutor_id: appointment.tutor_id)
+    # Add the tutor back to the queue
+    TutorOnlineQueue.instance.push(appointment.tutor_id)
   end
 end

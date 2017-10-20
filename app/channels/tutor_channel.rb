@@ -22,9 +22,22 @@ class TutorChannel < ApplicationCable::Channel
   def response(data)
     if data['response'] == 'accept'
       tutor_id   = current_user.id
-      puts data
       student_id = data['message']['student_id']
       plan_id    = data['message']['plan_id']
+      
+      # Check if the request have been accepted or cancel.
+      student = Core::Student.find(student_id)
+      if student.state != 'requesting'
+        # Notify the tutor that request has been cancel or accepted
+        msg = I18n.t('tutors.errors.appointment.occupied')
+        MessageBroadcastJob.perform_later(msg, 'notification', tutor_id: tutor_id)
+        # Add the tutor back to queue
+        TutorOnlineQueue.instance.push(tutor_id)
+        return
+      else
+        # Keep going, change the student state
+        student.change_state('meeting')
+      end
 
       # Create an appointment
       appointment = current_user.appointments
@@ -45,12 +58,16 @@ class TutorChannel < ApplicationCable::Channel
       call_end_reminder = Settings.call_speak_reminder_time
       msg = I18n.t('appointment.conference_room.call_end',
                    time: call_end_reminder)
-      MessageBroadcastJob.set(wait: call_length - call_end_reminder)
-                         .perform_later(msg, 'notification',
-                                        student_id: student_id,
-                                        tutor_id: tutor_id)
+      job_reminder = MessageBroadcastJob.set(wait: call_length - call_end_reminder)
+                               .perform_later(msg, 'notification',
+                                               student_id: student_id,
+                                               tutor_id: tutor_id)
       # Terminate the conference room in serveral mins
-      CompleteCallJob.set(wait: call_length).perform_later(appointment.id)
+      job_complete = CompleteCallJob.set(wait: call_length).perform_later(appointment.id)
+      # Store the jid for the complete call job for later usage.
+      jid_reminder = job_reminder.provider_job_id
+      jid_complete = job_complete.provider_job_id
+      appointment.update_attribute(:jids, jid_reminder.to_s + '|' + jid_complete.to_s)
     else
       current_user.update_attribute(:decline_count,
                                     current_user.decline_count + 1)

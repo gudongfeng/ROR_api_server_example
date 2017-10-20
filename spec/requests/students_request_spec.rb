@@ -128,15 +128,6 @@ RSpec.describe "Student request", :type => :request do
       expect(response).to have_http_status(:unauthorized)
       expect(json['error']).to eq I18n.t('students.errors.credential')
     end
-
-    it 'fails with invalid state value' do
-      headers = { Authorization: @token }
-      patch '/api/v1/students/info',
-          params: { student: { state: 'invalide_state' } },
-          headers: headers
-      expect(response).to have_http_status :unprocessable_entity
-      expect(json['error']).to include 'state'
-    end
   end
 
   describe 'reset the password' do
@@ -186,17 +177,6 @@ RSpec.describe "Student request", :type => :request do
         get api_v1_students_send_verification_code_path, headers: headers
       }.to have_enqueued_job(SendSmsJob)
       expect(response).to have_http_status :ok
-    end
-  end
-
-  describe 'get the student status' do
-    let(:student) { create(:student) }
-
-    it 'success' do
-      headers = { Authorization: @token }
-      get api_v1_students_status_path, headers: headers
-      expect(response).to have_http_status :ok
-      expect(json).to eq student.get_current_status.as_json
     end
   end
 end

@@ -15,6 +15,7 @@ cn:
       call_delay: 通话将于 %{time} 秒后开始
       call_end: 通话将于 %{time} 秒后结束
       call_terminated: 通话结束
+      call_extend: 通话已延长 %{time} 秒
   students:
     create:
       success: 成功注册账号, 请使用激活码激活账号
@@ -37,6 +38,8 @@ cn:
         invalid: 错误的验证码
       appointment:
         busy: 外教正忙，请稍后再试
+        call_extend: 延长通话失败
+        cancel: 请求已失效或已处理
   tutors:
     create:
       success: 成功注册账号
@@ -57,10 +60,8 @@ cn:
       verification_code:
         missing: 无法找到验证码
         invalid: 错误的验证码
-  requests:
-    errors:
-      save: 保存请求出错 
-
+      appointment:
+        occupied: 请求已被其他人接受或者已取消
   error:
     messages:
       parameters:         "缺少参数"

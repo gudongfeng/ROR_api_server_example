@@ -1,6 +1,5 @@
-
 // Student subscribes to student channel
-const program   = require('commander') 
+const program   = require('commander');
 const { prompt } = require('inquirer');
 const WebSocket = require('ws');
 var ws;
@@ -9,9 +8,17 @@ var plan_id;
 
 const request_question = [
   {
-    type : 'input',
-    name : 'plan_id',
-    message : 'Enter plan id (1, 2 or 3) ..'
+    type: 'input',
+    name: 'plan_id',
+    message: 'Enter plan id (1, 2 or 3) ..'
+  }
+]
+
+const student_option = [
+  {
+    type: 'input',
+    name: 'options',
+    message: 'Choose an option (e: extend call, c: cancel request) ..'
   }
 ]
 
@@ -33,7 +40,7 @@ var subscribe = function(token, type) {
   ws = new WebSocket("ws://localhost:3000/cable?type=" + type.toLowerCase() + "", options);
   ws.onopen = function() {
     ws.send(JSON.stringify(subscribe)); 
-    console.log("DEBUG: Subscribe to the " + type + " channel");
+    console.log("\nDEBUG: Subscribe to the " + type + " channel");
   }
 
   ws.onmessage = function(e) {
@@ -41,7 +48,7 @@ var subscribe = function(token, type) {
     if (res.identifier && res.message) {
       student_id = res.message.message.student_id
       plan_id = res.message.message.plan_id
-      console.log("DEBUG: " + JSON.stringify(res.message));
+      console.log("\nDEBUG: " + JSON.stringify(res.message));
     }
   };
 }
@@ -52,7 +59,28 @@ var send_request = function(data){
                   "identifier":"{\"channel\":\"StudentChannel\"}",
                   "data":"{\"action\":\"request\",\"plan_id\":" + plan_id + "}" };
   ws.send(JSON.stringify(request));
-  console.log('DEBUG: Send appointment request');
+  console.log('\nDEBUG: Send appointment request');
+  prompt(student_option).then(student_function);
+}
+
+var student_function  = function(data){
+  var choice = data.options;
+  if (choice == 'c') {
+    console.log("\nCancelling the request");
+    var request = { "command":"message",
+                    "identifier":"{\"channel\":\"StudentChannel\"}",
+                    "data":"{\"action\":\"cancel\"}" };
+    ws.send(JSON.stringify(request));
+  } else if (choice == 'e') {
+    console.log("\nExtend the call");
+    var request = { "command":"message",
+                    "identifier":"{\"channel\":\"StudentChannel\"}",
+                    "data":"{\"action\":\"extend\"}" };
+    ws.send(JSON.stringify(request));
+  } else {
+    console.log("\nInvalid input value")
+    prompt(student_option).then(student_function);
+  }
 }
 
 var answer_request = function(data){

@@ -53,8 +53,7 @@ module Core
 
     def to_json(options={})
       options[:except] ||= [:password_digest, :created_at, :updated_at,
-                            :activated, :activated_at, :activation_digest, 
-                            :reset_digest, :reset_sent_at]
+                            :activated, :activated_at]
       super(options)
     end
 
@@ -130,31 +129,6 @@ module Core
       rescue Exception => e
         Rails.logger.error "Push message failed to send because #{e.message}!"
       end
-    end
-
-    # (Updated) get the current status
-    def get_current_status
-      appointment = -1
-      request = nil
-      request = Core::Request.find(self.current_request) unless self.current_request.nil?
-      if request
-        if request.appointment_id
-          appointment = request.appointment_id
-        end
-      end
-      offline_time_proxy = 0
-      sidekiq_data = Sidekiq::ScheduledSet.new.find_job(self.tutor_timer_job_id)
-      if sidekiq_data
-        # get the schedule time for this sidekiq worker
-        offline_time_proxy = sidekiq_data.at - Time.now
-      end
-      {
-          state: self.state,
-          current_request: self.current_request,
-          staus: self.status,
-          appointment_id: appointment,
-          offline_time: (offline_time_proxy/60).to_i
-      }
     end
 
     # private functions to help

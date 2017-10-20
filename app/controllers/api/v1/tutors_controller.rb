@@ -203,25 +203,14 @@ class Api::V1::TutorsController < Api::ApiController
     render_message(I18n.t 'tutors.send_verification_code.success')
   end
 
-  api :GET, '/tutors/status', 'get the tutor current status'
-  header 'Authorization', "authentication token has to be passed as part
-   of the request.", required: true
-  error 401, 'unauthorized, account not found'
-  error 412, 'account not activate'
-  # Get Tutor Status
-  def get_status
-    render :json => current_tutor.get_current_status, :status => :ok
-  end
-
   api :DELETE, '/tutors/signout', 'signout the tutor, clean the device token'
   header 'Authorization', "authentication token has to be passed as part
    of the request.", required: true
   error 401, 'unauthorized, account not found'
   error 412, 'account not activate'
   def destroy
-    # clear the device token and update the tutor state
+    # clear the device token
     if current_tutor.update_attribute(:device_token, nil)
-      # @tutor.change_state 'unavailable' if @tutor.state.eql? 'available'
       render_message(I18n.t 'tutors.destroy.success')
     else
       save_model_error current_tutor
@@ -369,7 +358,6 @@ class Api::V1::TutorsController < Api::ApiController
     params[:tutor][:balance] = 0
     # Initial tutor level is the lowest level
     params[:tutor][:level] = 1
-    params[:tutor][:state] = 'available'
     params.require(:tutor).permit(:name, :email, :password, :gender, :picture,
                                   :password_confirmation, :balance,
                                   :phoneNumber, :description, :region,
