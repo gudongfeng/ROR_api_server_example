@@ -1,10 +1,10 @@
 class Api::V1::StudentsController < Api::ApiController
   prepend_before_action :authenticate_student_request,
-    :only => [:show, :edit, :reset_password, :get_status,
+    :only => [:show, :edit, :reset_password, :get_status, :rate,
               :send_verification_code, :destroy, :activate_account]
   before_action :activation_check,
     :only => [:show, :edit, :reset_password, :get_status,
-              :send_verification_code, :destroy]
+              :send_verification_code, :destroy, :rate]
 
   attr_reader :current_student
 
@@ -179,6 +179,30 @@ class Api::V1::StudentsController < Api::ApiController
     end
   end
 
+  api :POST, '/students/rate', 'student rates the appointment'
+  header 'Authorization', "authentication token has to be passed as part
+    of the request.", required: true
+  param :appointment_id, Integer, :desc => 'appointment id'
+  param :rate, Integer, :desc => 'scale from 1 to 10, 1 is the lowest'
+  param :feedback, String, :desc => 'student gives feedback to the tutor'
+  error 401, 'unauthorized, account not found'
+  error 412, 'account not activate'
+  error 400, 'parameter missing' 
+  error 422, 'parameter value error'
+  def rate
+    if params && params[:appointment_id] && params[:rate] && params[:feedback]
+      ap = current_student.appointments.find(params[:appointment_id])
+
+      if ap && ap.update_attributes(:student_feedback => params[:feedback],
+                                    :student_rating => params[:rate])
+        render_message(I18n.t 'students.rate.success')
+      else
+        save_model_error(ap)
+      end
+    else
+      return render_params_missing_error
+    end
+  end
 
 ################################################################################ 
 # Following code Need to be updated

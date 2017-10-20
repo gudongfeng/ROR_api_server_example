@@ -217,7 +217,7 @@ class Api::V1::TutorsController < Api::ApiController
     end
   end
 
-  api :POST, '/tutors/rate', 'tutor rate this appointment'
+  api :POST, '/tutors/rate', 'tutor rates the appointment'
   header 'Authorization', "authentication token has to be passed as part
     of the request.", required: true
   param :appointment_id, Integer, :desc => 'appointment id'
@@ -241,6 +241,7 @@ class Api::V1::TutorsController < Api::ApiController
       return render_params_missing_error
     end
   end
+
 
 ################################################################################ 
 # Following code Need to be updated

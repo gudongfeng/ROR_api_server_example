@@ -18,6 +18,7 @@ Rails.application.routes.draw do
       # (updated)
       get   'students/info'    => 'students#show'
       patch 'students/info'    => 'students#edit'
+      post  'students/rate'    => 'students#rate'
       post  'students/signup'  => 'students#create'
       delete'students/signout' => 'students#destroy'
       post  'students/activate_account' => 'students#activate_account'
