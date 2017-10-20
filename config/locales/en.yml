@@ -54,6 +54,8 @@ en:
       success: successfully resend the code, please check your message
     destroy:
       success: successfully logout
+    rate:
+      success: successfully rate and comment
     errors:
       credential: invalid credentials
       activation: please activate your account first

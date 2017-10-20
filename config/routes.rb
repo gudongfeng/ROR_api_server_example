@@ -34,6 +34,7 @@ Rails.application.routes.draw do
       # (updated)
       get   'tutors/info'     => 'tutors#show'
       patch 'tutors/info'     => 'tutors#edit'
+      post  'tutors/rate'     => 'tutors#rate'
       post  'tutors/signup'   => 'tutors#create'
       delete'tutors/signout'  => 'tutors#destroy'
       post  'tutors/activate_account' => 'tutors#activate_account'

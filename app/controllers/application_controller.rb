@@ -56,18 +56,18 @@ class ApplicationController < ActionController::API
     render :json => { error: error_str }, :status => :unprocessable_entity
   end
 
-  # Parameters missing error
+  # (Updated) Parameters missing error
   def render_params_missing_error
     render :json => { error: I18n.t('api.errors.parameters') },
            :status => :bad_request
   end
 
-  # General error
+  # (Updated) General error
   def render_error(message, status)
     render json: { error: message }, status: status
   end
   
-  # General success message
+  # (Updated) General success message
   def render_message(message)
     render json: { message: message }, status: :ok
   end

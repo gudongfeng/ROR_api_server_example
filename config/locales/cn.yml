@@ -54,6 +54,8 @@ cn:
       success: 成功发送新的验证码,请查看手机短信
     destroy:
       success: 成功登出
+    rate:
+      success: 打分与评论成功
     errors:
       credential: 错误的令牌信息
       activation: 账户未激活,请先激活账号

@@ -253,4 +253,28 @@ RSpec.describe Api::V1::TutorsController, type: :controller do
       expect(response).to have_http_status :bad_request
     end
   end
+
+  describe 'POST #rate' do
+    let(:appointment) { create(:appointment) }
+    let(:tutor) { appointment.tutor }
+
+    it 'rate the appointment successfully', :show_in_doc do
+      post :rate, params: { appointment_id: appointment.id, rate: 10, feedback: 'good' }
+      expect(response).to have_http_status :ok
+      appointment.reload
+      expect(appointment.tutor_rating).to eql(10)
+      expect(appointment.tutor_feedback).to eql('good')
+    end
+    
+    it 'rate the appointment with invalid parameters' do
+      post :rate, params: { appointment_id: appointment.id, rate: 11, feedback: 'good' }
+      expect(response).to have_http_status :unprocessable_entity
+      expect(json['error']).to include('tutor_rating')
+    end
+    
+    it 'fails with missing parameters' do
+      post :rate, params: { appointment_id: appointment.id, rate: 1 }
+      expect(response).to have_http_status(:bad_request)
+    end
+  end
 end

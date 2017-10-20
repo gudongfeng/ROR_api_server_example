@@ -114,7 +114,7 @@
       },
       "response_data": {
         "message": "successfully sign up",
-        "student_id": 39
+        "student_id": 11
       },
       "code": "200",
       "show_in_doc": 1,
@@ -293,10 +293,8 @@
         "name": "student1",
         "email": "student1@example.com",
         "phoneNumber": "11111111",
-        "state": "available",
         "country_code": 1,
         "balance": null,
-        "prioritized_tutor": null,
         "gender": "male"
       },
       "code": "200",
@@ -337,17 +335,17 @@
           "education": {
             "a": {
               "degree": "bachelor",
-              "end_time": "2017-10-09 10:42:42 -0700",
+              "end_time": "2017-10-20 16:20:56 -0700",
               "major": "computer science",
               "school": "abc school",
-              "start_time": "2017-10-09 10:42:42 -0700"
+              "start_time": "2017-10-20 16:20:56 -0700"
             },
             "b": {
               "degree": "master",
-              "end_time": "2017-10-09 10:42:42 -0700",
+              "end_time": "2017-10-20 16:20:56 -0700",
               "major": "computer science",
               "school": "cde school",
-              "start_time": "2017-10-09 10:42:42 -0700"
+              "start_time": "2017-10-20 16:20:56 -0700"
             }
           },
           "email": "test@test.com",
@@ -399,18 +397,18 @@
           "education": {
             "a": {
               "degree": "bachelor",
-              "end_time": "2017-10-09 10:42:42 -0700",
+              "end_time": "2017-10-20 16:20:56 -0700",
               "id": "2",
               "major": "computer science",
               "school": "abc school",
-              "start_time": "2017-10-09 10:42:42 -0700"
+              "start_time": "2017-10-20 16:20:56 -0700"
             },
             "b": {
               "degree": "bachelor",
-              "end_time": "2017-10-09 10:42:42 -0700",
+              "end_time": "2017-10-20 16:20:56 -0700",
               "major": "computer science",
               "school": "cde school",
-              "start_time": "2017-10-09 10:42:42 -0700"
+              "start_time": "2017-10-20 16:20:56 -0700"
             }
           }
         }
@@ -434,10 +432,10 @@
           "education": {
             "a": {
               "degree": "bachelor",
-              "end_time": "2017-10-09 10:42:42 -0700",
+              "end_time": "2017-10-20 16:20:56 -0700",
               "major": "computer science",
               "school": "abc school",
-              "start_time": "2017-10-09 10:42:42 -0700"
+              "start_time": "2017-10-20 16:20:56 -0700"
             }
           }
         }
@@ -447,6 +445,27 @@
       },
       "code": "200",
       "show_in_doc": 0,
+      "recorded": true
+    }
+  ],
+  "tutors#rate": [
+    {
+      "verb": "POST",
+      "path": "/api/v1/tutors/rate",
+      "versions": [
+        "v1"
+      ],
+      "query": null,
+      "request_data": {
+        "appointment_id": "1",
+        "feedback": "good",
+        "rate": "10"
+      },
+      "response_data": {
+        "message": "successfully rate and comment"
+      },
+      "code": "200",
+      "show_in_doc": 1,
       "recorded": true
     }
   ],
@@ -531,10 +550,10 @@
           {
             "id": 1,
             "degree": "bachelor",
-            "school": "test schoold",
+            "school": "test school",
             "major": "test major",
-            "start_time": "2017-10-02",
-            "end_time": "2017-10-09"
+            "start_time": "2017-10-13",
+            "end_time": "2017-10-20"
           }
         ]
       },
