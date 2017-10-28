@@ -1,10 +1,11 @@
 class Api::V1::TutorsController < Api::ApiController
   prepend_before_action :authenticate_tutor_request,
     :only => [:show, :edit, :get_status, :destroy, :reset_password,
-              :send_verification_code, :activate_account]
+              :send_verification_code, :activate_account, :rate,
+              :appointments]
   before_action :activation_check,
     :only => [:show, :edit, :get_status, :destroy, :reset_password,
-              :send_verification_code]
+              :send_verification_code, :rate, :appointments]
 
   attr_reader :current_tutor
 
@@ -217,74 +218,66 @@ class Api::V1::TutorsController < Api::ApiController
     end
   end
 
+  api :POST, '/tutors/rate', 'tutor rates the appointment'
+  header 'Authorization', "authentication token has to be passed as part
+    of the request.", required: true
+  param :appointment_id, Integer, :desc => 'appointment id'
+  param :rate, Integer, :desc => 'scale from 1 to 10, 1 is the lowest'
+  param :feedback, String, :desc => 'tutor give feedback to this student'
+  error 401, 'unauthorized, account not found'
+  error 412, 'account not activate'
+  error 400, 'parameter missing' 
+  error 422, 'parameter value error'
+  def rate
+    if params && params[:appointment_id] && params[:rate] && params[:feedback]
+      ap = current_tutor.appointments.find(params[:appointment_id])
 
+      if ap && ap.update_attributes(:tutor_feedback => params[:feedback],
+                                    :tutor_rating => params[:rate])
+        render_message(I18n.t 'tutors.rate.success')
+      else
+        save_model_error(ap)
+      end
+    else
+      return render_params_missing_error
+    end
+  end
+
+
+  api :POST, '/tutors/appointments', 'retrieve all appointments of the tutor,
+    retrieve the specific appointment if we pass the appointment id.'
+  header 'Authorization', "authentication token has to be passed as part
+    of the request.", required: true 
+  param :appointment_id, Integer, :desc => 'appointment id'
+  error 401, 'unauthorized, account not found'
+  error 412, 'account not activate'
+  error 422, 'parameter value error'
+  def appointments
+    if params && params[:appointment_id]
+      # Return the appointment according to appointment id
+      ap = current_tutor.appointments.find_by_id(params[:appointment_id])
+      if ap
+        render json: ap, :status => :ok
+      else
+        # Invalid appointment id
+        render_error(I18n.t('tutors.errors.appointment.invalid_id'),
+                    :unprocessable_entity)
+      end
+    else
+      # Return all the appointments
+      aps = ActiveModelSerializers::SerializableResource
+            .new(current_tutor.appointments,
+                each_serializer: Core::AppointmentSerializer)
+            .as_json
+      render json: aps, :status => :ok
+    end
+  end
 
 
 ################################################################################ 
 # Following code Need to be updated
 ################################################################################ 
 
-  # Change the state of the tutor
-  def change_state
-    if params
-      if @tutor && @tutor.remember_expiry > Time.now
-        if @tutor.activated?
-          if @tutor.change_state(tutor_change_state_params[:state])
-            Sidekiq::Status.cancel @tutor.tutor_timer_job_id unless @tutor.tutor_timer_job_id.nil?
-            if tutor_change_state_params[:state].eql? 'available'
-              # set up a timer to set the tutor to 'unavailable' after serveral mins
-              job_id = TutorGoOffline.perform_in Settings.tutor_online_time,
-                                                 @tutor.id
-              @tutor.update_attribute :tutor_timer_job_id, job_id
-            else
-              @tutor.update_attribute :tutor_timer_job_id, nil
-            end
-
-            render :json => {:message => (I18n.t 'success.messages.update_state')},
-                   :status => 200
-          else
-            save_model_error @tutor
-          end
-        else
-          json_error_message 401, (I18n.t 'error.messages.not_activate')
-        end
-      else
-        json_error_message 401, (I18n.t 'error.messages.login')
-      end
-    else
-      json_error_message 400, (I18n.t 'error.messages.parameters')
-    end
-  end
-
-  # tutor can modify and appointment(for now used for rating & feedback)
-  def rate_feedback
-    # check presentation of required parameters
-    if params
-      if @tutor && @tutor.remember_expiry > Time.now
-        #  find certain appointment by order_no
-        ap = @tutor.appointments.find_by_id(tutor_rate_feedback_params[:id])
-        if ap && ap.update_attributes(tutor_rate_feedback_params)
-          # tutor finished rating, change the tutor state
-          if @tutor.tutor_timer_job_id
-            @tutor.change_state('available')
-          else
-            @tutor.change_state('unavailable')
-          end
-          # return the success message
-          render :json => {:message => (I18n.t 'success.messages.rating')},
-                 :status => 200
-          return
-        else
-          json_error_message 401, (I18n.t 'error.messages.rating')
-          # not sure why code 204 is not working???
-        end
-      else
-        json_error_message 401, (I18n.t 'error.messages.login')
-      end
-    else
-      json_error_message 400, (I18n.t 'error.messages.parameters')
-    end
-  end
 
   # Get the number of tutors online
   def online_count

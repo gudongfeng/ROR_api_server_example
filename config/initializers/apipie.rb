@@ -11,7 +11,7 @@ Apipie.configure do |config|
   config.validate = false
   # i18n localization setting
   config.default_locale = 'en'
-  config.languages = ['en', 'cn']
+  config.languages = ['en']
 
   # add the authentication for the production
   # add authenticate to api document

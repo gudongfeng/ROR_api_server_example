@@ -199,4 +199,54 @@ RSpec.describe Api::V1::StudentsController, type: :controller do
       expect(student.device_token).to eq nil
     end
   end
+
+  describe 'POST #rate' do
+    let(:appointment) { create(:appointment) }
+    let(:student) { appointment.student }
+
+    it 'rate the appointment successfully', :show_in_doc do
+      post :rate, params: { appointment_id: appointment.id, rate: 10, feedback: 'good' }
+      expect(response).to have_http_status :ok
+      appointment.reload
+      expect(appointment.student_rating).to eql(10)
+      expect(appointment.student_feedback).to eql('good')
+    end
+    
+    it 'rate the appointment with invalid parameters' do
+      post :rate, params: { appointment_id: appointment.id, rate: 11, feedback: 'good' }
+      expect(response).to have_http_status :unprocessable_entity
+      expect(json['error']).to include('student_rating')
+    end
+    
+    it 'fails with missing parameters' do
+      post :rate, params: { appointment_id: appointment.id, rate: 1 }
+      expect(response).to have_http_status(:bad_request)
+    end
+  end
+
+  describe 'POST #appointments' do
+    let(:appointment) { create(:appointment) }
+    let(:student) { appointment.student }
+
+    it 'get all the appointment information of the student', :show_in_doc do
+      post :appointments
+      expect(response).to have_http_status :ok
+      expect(response.body).to eq \
+        ActiveModelSerializers::SerializableResource
+          .new(student.appointments, each_serializer: Core::AppointmentSerializer)
+          .to_json
+    end
+
+    it 'get one appointment information of the student', :show_in_doc do
+      post :appointments, params: { appointment_id: appointment.id }
+      expect(response).to have_http_status :ok
+      expect(response.body).to eq Core::AppointmentSerializer.new(appointment).to_json
+    end
+
+    it 'return error when give the invalid id of appointments' do
+      post :appointments, params: { appointment_id: 1000 }
+      expect(response).to have_http_status :unprocessable_entity
+      expect(json['error']).to eq I18n.t('students.errors.appointment.invalid_id')
+    end
+  end
 end

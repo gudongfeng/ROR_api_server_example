@@ -3,7 +3,7 @@ FactoryGirl.define do
     sequence(:id) { |n| "#{n}" }
     start_time { Time.now }
     end_time { Time.now + 10.minutes }
-    student_rating 5
+    student_rating 10
     tutor_rating 10
     student_feedback { ('a'..'z').to_a.shuffle.join }
     tutor_feedback { ('a'..'z').to_a.shuffle.join }

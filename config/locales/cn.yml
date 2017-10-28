@@ -30,6 +30,8 @@ cn:
       success: 成功发送新的验证码,请查看手机短信
     destroy:
       success: 成功登出
+    rate:
+      success: 打分与评论成功
     errors:
       credential: 错误的令牌信息
       activation: 账户未激活,请先激活账号
@@ -40,6 +42,7 @@ cn:
         busy: 外教正忙，请稍后再试
         call_extend: 延长通话失败
         cancel: 请求已失效或已处理
+        invalid_id: 查无此预约
   tutors:
     create:
       success: 成功注册账号
@@ -54,6 +57,8 @@ cn:
       success: 成功发送新的验证码,请查看手机短信
     destroy:
       success: 成功登出
+    rate:
+      success: 打分与评论成功
     errors:
       credential: 错误的令牌信息
       activation: 账户未激活,请先激活账号
@@ -62,69 +67,4 @@ cn:
         invalid: 错误的验证码
       appointment:
         occupied: 请求已被其他人接受或者已取消
-  error:
-    messages:
-      parameters:         "缺少参数"
-      no_account:         "账号不存在"
-      no_email:           "邮件不存在"
-      phone_number:       "手机号码不存在"
-      wrong_code:         "验证码错误"
-      no_code:            "无法找到验证码信息" 
-      not_activate:       "账户未激活,请先激活账号"
-      account_pass:       "账户或者密码错误"
-      login:              "请先登录"
-      tutor_state:        "获取外教状态失败"
-      rating:             "无法打分与评论"
-      unpaid_appointment: "您有未付款的订单"
-      request:            "创建请求失败: %{reason}"
-      cancel_request:     "取消请求失败: %{reason}"
-      no_tutor:           "外教不存在"
-      no_appointment:     "没有预约记录"
-      no_education:       "没有学校信息"
-      no_record:          "没有记录"
-      reply:              "回复失败(已经回复或者无法找到相应记录)"
-      version:            "无法找到当前版本"
-      email_pass_flash:
-        empty:            "密码不能为空"
-        length:           "密码长度最少为6位"
-        expire:           "重设密码请求过期,请重新请求"
-      discount:
-        used:             "已经使用过优惠券"
-        invalid:          "优惠券无效"
-      reconnect:
-        min:              "无法重连,预约将在3分钟后结束"
-      token:
-        credential:       "错误的身份信息"
-        invalid:          "错误的身份令牌"
-        missing:          "缺少身份令牌"
-  success:
-    messages:
-      signup:             "成功注册账号, 请使用激活码激活账号"
-      account_activate:   "成功激活账号, 请返回登陆"
-      code:               "【山姆美语】您的验证码为%{code}"
-      resend_code:        "成功发送新的验证码,请查看手机短信"
-      verification:       "成功认证验证码"
-      reset_password:     "成功更新密码"
-      update_account:     "成功修改信息"
-      update_state:       "成功更新状态"
-      rating:             "成功打分与评论"
-      request:            "成功创建一个请求"
-      cancel_request:     "成功取消请求"
-      token:              "成功认证口令"
-      end_appointment:    "成功结束此次预约"
-      certificate:        "成功创建证书"
-      email_pass_reset:   "成功发送邮件,请根据邮件指示来重设密码"
-      pass_reset:         "成功重设密码"
-      create_discount:    "成功创建新的折扣码"
-      create_topic:       "成功创建新的话题"
-      login_token:        "成功认证手令"
-      reply:              "成功回复"
-      reconnect:          "成功重连,请等待电话"
-      version:            "成功创建新的版本号"
-      discount_zero:      "成功使用一次课程券,还剩${count}次"
-      t_online_reminder:  "外教上线时间为北京时间20点至23点, 请小伙伴们晚上来约~"
-  term:
-    pay:
-      finished:   "支付完成"
-      unfinished: "支付未完成"
-    error:      "错误"
+        invalid_id: 查无此预约

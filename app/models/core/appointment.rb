@@ -13,9 +13,9 @@ module Core
     # =========================================================================
     validates :start_time, presence: true
     validates :end_time, presence: true
-    validates :student_rating, inclusion: { in: 1..5 }
-    validates :tutor_rating, inclusion: { in: 1..10 }
-    validates :plan_id, inclusion: { in: 1..3 }
+    validates :student_rating, inclusion: { in: 1..10 }, allow_blank: true
+    validates :tutor_rating, inclusion: { in: 1..10 }, allow_blank: true
+    validates :plan_id, inclusion: { in: 1..3 }, allow_blank: true
 
     # ==========================================================================
     # STUDENT FUNCTIONS
@@ -24,6 +24,12 @@ module Core
     def to_json(options={})
       options[:except] ||= [:created_at, :updated_at]
       super(options)
+    end
+
+    # (updated)
+    def as_json(options={})
+      options[:except] ||= [:created_at, :updated_at]
+      super(options) 
     end
 
     def student_all_appointment_to_json
