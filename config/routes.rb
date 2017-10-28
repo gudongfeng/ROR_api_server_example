@@ -26,12 +26,6 @@ Rails.application.routes.draw do
       post  'students/reset_password'   => 'students#reset_password'
       get   'students/send_verification_code' => 'students#send_verification_code'
 
-      # (not update)
-      post  'students/verify_token' => 'students#verify_token'
-      post  'students/check_email' => 'students#check_email'
-      post  'students/verify_verification_code' => 'students#verify_verification_code'
-      get   'students/all_appointments' => 'students#get_all_appointments'
-
       # teacher info
       # (updated)
       get   'tutors/info'     => 'tutors#show'
@@ -43,10 +37,6 @@ Rails.application.routes.draw do
       post  'tutors/activate_account' => 'tutors#activate_account'
       post  'tutors/reset_password'   => 'tutors#reset_password'
       get   'tutors/send_verification_code' => 'tutors#send_verification_code'
-
-      # (not update)
-      post  'tutors/verify_token' => 'tutors#verify_token'
-      post  'tutors/check_email' => 'tutors#check_email'
 
       # new reservation system
       post  'tutors/change_state' => 'tutors#change_state'

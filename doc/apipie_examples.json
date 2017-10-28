@@ -106,14 +106,14 @@
       "response_data": [
         {
           "id": 2,
-          "start_time": "2017-10-28T05:22:01.797Z",
-          "end_time": "2017-10-28T05:32:01.797Z",
+          "start_time": "2017-10-28T05:35:38.391Z",
+          "end_time": "2017-10-28T05:45:38.391Z",
           "tutor_id": 2,
           "student_id": 10,
           "student_rating": 10,
-          "student_feedback": "vgprytsakcndeiqjmhbwolfuxz",
+          "student_feedback": "vxqntlicmzafhejuwrybspgdok",
           "tutor_rating": 10,
-          "tutor_feedback": "gmcwohluvnkjqpfsedtzbaryxi",
+          "tutor_feedback": "zfjqdsxymvwkoiegualpthrbcn",
           "pay_state": "unpaid",
           "plan_id": 3,
           "amount": "12.0",
@@ -137,14 +137,14 @@
       },
       "response_data": {
         "id": 3,
-        "start_time": "2017-10-28T05:22:01.837Z",
-        "end_time": "2017-10-28T05:32:01.837Z",
+        "start_time": "2017-10-28T05:35:38.427Z",
+        "end_time": "2017-10-28T05:45:38.427Z",
         "tutor_id": 3,
         "student_id": 11,
         "student_rating": 10,
-        "student_feedback": "gfpyxrtoalcwzbjkdsmhqeinvu",
+        "student_feedback": "umsibarlfzhykgjxcdqvetnpwo",
         "tutor_rating": 10,
-        "tutor_feedback": "ljgmceoyftswknbvparzqhxuid",
+        "tutor_feedback": "obqwiskrzpgmtljaendcfyhvxu",
         "pay_state": "unpaid",
         "plan_id": 3,
         "amount": "12.0",
@@ -177,7 +177,7 @@
       },
       "response_data": {
         "message": "successfully sign up",
-        "student_id": 17
+        "student_id": 20
       },
       "code": "200",
       "show_in_doc": 1,
@@ -405,6 +405,69 @@
       "recorded": true
     }
   ],
+  "tutors#appointments": [
+    {
+      "verb": "POST",
+      "path": "/api/v1/tutors/appointments",
+      "versions": [
+        "v1"
+      ],
+      "query": null,
+      "request_data": {
+      },
+      "response_data": [
+        {
+          "id": 5,
+          "start_time": "2017-10-28T05:35:38.839Z",
+          "end_time": "2017-10-28T05:45:38.839Z",
+          "tutor_id": 13,
+          "student_id": 13,
+          "student_rating": 10,
+          "student_feedback": "gjskbtvdeyplzihuconxrfqwam",
+          "tutor_rating": 10,
+          "tutor_feedback": "xavjnsptedryuwczkiohgqfmbl",
+          "pay_state": "unpaid",
+          "plan_id": 3,
+          "amount": "12.0",
+          "tutor_earned": "10.0",
+          "discount_id": null
+        }
+      ],
+      "code": "200",
+      "show_in_doc": 1,
+      "recorded": true
+    },
+    {
+      "verb": "POST",
+      "path": "/api/v1/tutors/appointments",
+      "versions": [
+        "v1"
+      ],
+      "query": null,
+      "request_data": {
+        "appointment_id": "6"
+      },
+      "response_data": {
+        "id": 6,
+        "start_time": "2017-10-28T05:35:38.870Z",
+        "end_time": "2017-10-28T05:45:38.870Z",
+        "tutor_id": 14,
+        "student_id": 14,
+        "student_rating": 10,
+        "student_feedback": "igfeabmxnqkcluhdtrzwjovysp",
+        "tutor_rating": 10,
+        "tutor_feedback": "xpltzsbnyovdwciqejkagfmhur",
+        "pay_state": "unpaid",
+        "plan_id": 3,
+        "amount": "12.0",
+        "tutor_earned": "10.0",
+        "discount_id": null
+      },
+      "code": "200",
+      "show_in_doc": 0,
+      "recorded": true
+    }
+  ],
   "tutors#create": [
     {
       "verb": "POST",
@@ -419,17 +482,17 @@
           "education": {
             "a": {
               "degree": "bachelor",
-              "end_time": "2017-10-27 22:22:01 -0700",
+              "end_time": "2017-10-27 22:35:38 -0700",
               "major": "computer science",
               "school": "abc school",
-              "start_time": "2017-10-27 22:22:01 -0700"
+              "start_time": "2017-10-27 22:35:38 -0700"
             },
             "b": {
               "degree": "master",
-              "end_time": "2017-10-27 22:22:01 -0700",
+              "end_time": "2017-10-27 22:35:38 -0700",
               "major": "computer science",
               "school": "cde school",
-              "start_time": "2017-10-27 22:22:01 -0700"
+              "start_time": "2017-10-27 22:35:38 -0700"
             }
           },
           "email": "test@test.com",
@@ -481,18 +544,18 @@
           "education": {
             "a": {
               "degree": "bachelor",
-              "end_time": "2017-10-27 22:22:02 -0700",
+              "end_time": "2017-10-27 22:35:38 -0700",
               "id": "2",
               "major": "computer science",
               "school": "abc school",
-              "start_time": "2017-10-27 22:22:02 -0700"
+              "start_time": "2017-10-27 22:35:38 -0700"
             },
             "b": {
               "degree": "bachelor",
-              "end_time": "2017-10-27 22:22:02 -0700",
+              "end_time": "2017-10-27 22:35:38 -0700",
               "major": "computer science",
               "school": "cde school",
-              "start_time": "2017-10-27 22:22:02 -0700"
+              "start_time": "2017-10-27 22:35:38 -0700"
             }
           }
         }
@@ -516,10 +579,10 @@
           "education": {
             "a": {
               "degree": "bachelor",
-              "end_time": "2017-10-27 22:22:02 -0700",
+              "end_time": "2017-10-27 22:35:38 -0700",
               "major": "computer science",
               "school": "abc school",
-              "start_time": "2017-10-27 22:22:02 -0700"
+              "start_time": "2017-10-27 22:35:38 -0700"
             }
           }
         }

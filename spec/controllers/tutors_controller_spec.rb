@@ -277,4 +277,31 @@ RSpec.describe Api::V1::TutorsController, type: :controller do
       expect(response).to have_http_status(:bad_request)
     end
   end
+
+
+  describe 'POST #appointments' do
+    let(:appointment) { create(:appointment) }
+    let(:tutor) { appointment.tutor }
+
+    it 'get all the appointment information of the tutor', :show_in_doc do
+      post :appointments
+      expect(response).to have_http_status :ok
+      expect(response.body).to eq \
+        ActiveModelSerializers::SerializableResource
+          .new(tutor.appointments, each_serializer: Core::AppointmentSerializer)
+          .to_json
+    end
+
+    it 'get one appointment information of the tutor', :show_in_doc do
+      post :appointments, params: { appointment_id: appointment.id }
+      expect(response).to have_http_status :ok
+      expect(response.body).to eq Core::AppointmentSerializer.new(appointment).to_json
+    end
+
+    it 'return error when give the invalid id of appointments' do
+      post :appointments, params: { appointment_id: 1000 }
+      expect(response).to have_http_status :unprocessable_entity
+      expect(json['error']).to eq I18n.t('tutors.errors.appointment.invalid_id')
+    end
+  end
 end

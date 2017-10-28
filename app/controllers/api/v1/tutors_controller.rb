@@ -1,10 +1,11 @@
 class Api::V1::TutorsController < Api::ApiController
   prepend_before_action :authenticate_tutor_request,
     :only => [:show, :edit, :get_status, :destroy, :reset_password,
-              :send_verification_code, :activate_account, :rate]
+              :send_verification_code, :activate_account, :rate,
+              :appointments]
   before_action :activation_check,
     :only => [:show, :edit, :get_status, :destroy, :reset_password,
-              :send_verification_code, :rate]
+              :send_verification_code, :rate, :appointments]
 
   attr_reader :current_tutor
 
@@ -239,6 +240,36 @@ class Api::V1::TutorsController < Api::ApiController
       end
     else
       return render_params_missing_error
+    end
+  end
+
+
+  api :POST, '/tutors/appointments', 'retrieve all appointments of the tutor,
+    retrieve the specific appointment if we pass the appointment id.'
+  header 'Authorization', "authentication token has to be passed as part
+    of the request.", required: true 
+  param :appointment_id, Integer, :desc => 'appointment id'
+  error 401, 'unauthorized, account not found'
+  error 412, 'account not activate'
+  error 422, 'parameter value error'
+  def appointments
+    if params && params[:appointment_id]
+      # Return the appointment according to appointment id
+      ap = current_tutor.appointments.find_by_id(params[:appointment_id])
+      if ap
+        render json: ap, :status => :ok
+      else
+        # Invalid appointment id
+        render_error(I18n.t('tutors.errors.appointment.invalid_id'),
+                    :unprocessable_entity)
+      end
+    else
+      # Return all the appointments
+      aps = ActiveModelSerializers::SerializableResource
+            .new(current_tutor.appointments,
+                each_serializer: Core::AppointmentSerializer)
+            .as_json
+      render json: aps, :status => :ok
     end
   end
 
