@@ -42,6 +42,7 @@ en:
         busy: tutor is busy, please try again later
         call_extend: fail to extend conference room
         cancel: request is invalid or has been processed
+        invalid_id: invalid appointment id
   tutors:
     create:
       success: successfully sign up
@@ -66,71 +67,4 @@ en:
         invalid: invalid verification code
       appointment:
         occupied: request has been accepted or canceled
-  error:
-    model:
-      number:             "only allow number"
-    messages:
-      parameters:         "parameters missing"
-      no_account:         "account doesn't exist"
-      no_email:           "email address not found"
-      phone_number:       "phone number doesn't exist"
-      wrong_code:         "error code"
-      no_code:            "verification code has not been found" 
-      not_activate:       "please activate your account first"
-      account_pass:       "wrong account or password"
-      login:              "please login first"
-      tutor_state:        "fail to get the tutor state"
-      rating:             "can not rate or comment"
-      unpaid_appointment: "you have unpaid appointment"
-      request:            "fail to make request: %{reason}"
-      cancel_request:     "fail to cancel request: %{reason}"
-      no_tutor:           "tutor doesn't exist"
-      no_appointment:     "no appointment record"
-      no_education:       "cannot find the education record"
-      no_record:          "no record has been found"
-      reply:              "request already reply or can not find the request id"
-      version:            "cannot find current version"
-      email_pass_flash:
-        empty:            "password can't be empty"
-        length:           "password should have at least 6 characters"
-        expire:           "password reset has expired, please request a new password reset"
-      discount:
-        used:             "already use code"
-        invalid:          "invalid code"
-      reconnect:
-        min:              "cannot reconnect, appointment end in less than 3 minutes"
-      token:
-        credential:       "invalid credentials"
-        invalid:          "invalid token"
-        missing:          "missing token"
-  success:
-    messages:
-      signup:             "successfully sign up"
-      account_activate:   "successfully activated, please return and login"
-      code:               "【TalkWithSam】your verification code is %{code}"
-      resend_code:        "successfully resend the code, please check your message"
-      verification:       "successfully verified"
-      reset_password:     "successfully reset the password"
-      update_account:     "successfully update the information"
-      update_state:       "successfully update the state"
-      rating:             "successfully rate and comment"
-      request:            "successfully make a request"
-      cancel_request:     "successfully cancel the request"
-      token:              "successfully verified token"
-      end_appointment:    "successfully finished the appointment"
-      certificate:        "successfully create the certificate"
-      email_pass_reset:   "email sent with password reset instructions"
-      pass_reset:         "successfully reset the password"
-      create_discount:    "successfully create the discount"
-      create_topic:       "successfully create the title"
-      login_token:        "token valid"
-      reply:              "successfully reply"
-      reconnect:          "successfully reconnect, please wait for the phone call"
-      version:            "successfully create the version"
-      discount_zero:      "successfully apply the discount code, remaining ${count} times"
-      t_online_reminder:  "tutor will go online during 20:00 - 23:00 on beijing time, please come back later and check again."
-  term:
-    pay:
-      finished:   "payment finished"
-      unfinished: "payment unfinished"
-    error:      "error"
+        invalid_id: invalid appointment id

@@ -49,11 +49,17 @@ module Core
     # (updated)
     def to_json(options={})
       options[:except] ||= [:password_digest, :created_at, :updated_at,
-                            :remember_expiry, :activated, :activated_at,
-                            :session_count]
+                            :activated, :activated_at, :session_count]
       super(options)
     end
 
+    # (updated)
+    def as_json(options={})
+      options[:except] ||= [:password_digest, :created_at, :updated_at,
+                            :activated, :activated_at, :session_count]
+      super(options)
+    end
+    
     # (updated) activates an account.
     def activate
       # clear the verification code

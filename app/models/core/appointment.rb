@@ -26,6 +26,12 @@ module Core
       super(options)
     end
 
+    # (updated)
+    def as_json(options={})
+      options[:except] ||= [:created_at, :updated_at]
+      super(options) 
+    end
+
     def student_all_appointment_to_json
       options={}
       options[:only] = [:pay_state, :start_time, :end_time,

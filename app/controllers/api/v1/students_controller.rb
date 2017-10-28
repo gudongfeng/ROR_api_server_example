@@ -1,10 +1,11 @@
 class Api::V1::StudentsController < Api::ApiController
   prepend_before_action :authenticate_student_request,
     :only => [:show, :edit, :reset_password, :get_status, :rate,
-              :send_verification_code, :destroy, :activate_account]
+              :send_verification_code, :destroy, :activate_account,
+              :appointments]
   before_action :activation_check,
     :only => [:show, :edit, :reset_password, :get_status,
-              :send_verification_code, :destroy, :rate]
+              :send_verification_code, :destroy, :rate, :appointments]
 
   attr_reader :current_student
 
@@ -204,73 +205,38 @@ class Api::V1::StudentsController < Api::ApiController
     end
   end
 
+  api :POST, '/students/appointments', 'retrieve all appointments of the student,
+    retrieve the specific appointment if we pass the appointment id.'
+  header 'Authorization', "authentication token has to be passed as part
+    of the request.", required: true 
+  param :appointment_id, Integer, :desc => 'appointment id'
+  error 401, 'unauthorized, account not found'
+  error 412, 'account not activate'
+  error 422, 'parameter value error'
+  def appointments
+    if params && params[:appointment_id]
+      # Return the appointment according to appointment id
+      ap = current_student.appointments.find_by_id(params[:appointment_id])
+      if ap
+        render json: ap, :status => :ok
+      else
+        # Invalid appointment id
+        render_error(I18n.t('students.errors.appointment.invalid_id'),
+                     :unprocessable_entity)
+      end
+    else
+      # Return all the appointments
+      aps = ActiveModelSerializers::SerializableResource
+            .new(current_student.appointments,
+                each_serializer: Core::AppointmentSerializer)
+            .as_json
+      render json: aps, :status => :ok
+    end
+  end
+
 ################################################################################ 
 # Following code Need to be updated
 ################################################################################ 
-
-  # student can modify and appointment(for now used for rating & feedback)
-  def rate_feedback
-    if params
-      if @student && @student.remember_expiry > Time.now
-        #  find certain appointment by appointment id
-        ap = @student.appointments.find_by_id(rate_feedback_params[:id])
-
-        if @student.state.eql? 'rating'
-          if ap && ap.update_attributes(rate_feedback_params)
-            # student finished rating , change the state to available
-            @student.change_state 'available' if @student.state.eql? 'rating'
-            # set up the prioritized tutor
-            if rate_feedback_set_prioritized_tutor_params[:set_prioritized_tutor] == 'true'
-              ap.student.set_prioritized_tutor(ap.tutor.id)
-            elsif ap.student_rating < 1 && ap.student.prioritized_tutor == ap.tutor.id
-              ap.student.set_prioritized_tutor(nil)
-            end
-            render :json => {:message => (I18n.t 'success.messages.rating')},
-                   :status => 200
-            return
-          else
-            json_error_message 401, (I18n.t 'error.messages.rating')
-            # not sure why code 204 is not working???
-          end
-        else
-          json_error_message 400, (I18n.t 'error.messages.unpaid_appointment')
-        end
-      else
-        json_error_message 401, (I18n.t 'error.messages.login')
-      end
-    else
-      json_error_message 400, (I18n.t 'error.messages.parameters')
-    end
-  end
-
-  # This student is cancelling this request
-  def request_cancel_look_for_tutors
-    if params
-      if @student && @student.remember_expiry > Time.now
-        rv = @student.request_cancel_look_for_tutors(request_cancel_look_for_tutors_params[:session_id])
-        if rv == 'success'
-          render :json => {:message => (I18n.t 'success.messages.cancel_request')},
-                 :status => 200
-        else
-          json_error_message 409, (I18n.t 'error.messages.cancel_request', reason: rv)
-        end
-      else
-        json_error_message 401, (I18n.t 'error.messages.login')
-      end
-    else
-      json_error_message 400, (I18n.t 'error.messages.parameters')
-    end
-  end
-
-  # Check if the currently logged user has valid token
-  def verify_token
-    if @student && @student.remember_expiry > Time.now
-      render :json => {:message => (I18n.t 'success.messages.token')},
-             :status => 200
-    else
-      json_error_message 401, (I18n.t 'error.messages.login')
-    end
-  end
 
   # Get the number of tutors online
   def tutors_online_count
@@ -282,64 +248,6 @@ class Api::V1::StudentsController < Api::ApiController
     end
   end
 
-  # Request to get the info of the reserved tutor
-  def request_get_tutor
-    if params
-      if @student && @student.remember_expiry > Time.now
-        rv = @student.requests.find_by_id(request_get_tutor_params[:id])
-        if rv
-          render :json => rv.tutor, :status => 200
-        else
-          json_error_message 401, (I18n.t 'error.messages.no_tutor')
-        end
-      else
-        json_error_message 401, (I18n.t 'error.messages.login')
-      end
-    else
-      json_error_message 400, (I18n.t 'error.messages.parameters')
-    end
-  end
-
-  # Check if the student's email has been resisted or not
-  def check_email
-    if params && params[:email]
-      if Core::Student.find_by(email: params[:email])
-        render :json => {:message => 'false'}, :status => 200
-      else
-        render :json => {:message => 'true'}, :status => 200
-      end
-    else
-      json_error_message 400, (I18n.t 'error.messages.parameters')
-    end
-  end
-
-  # Get all the appointment of this student
-  def get_all_appointments
-    if @student && @student.remember_expiry > Time.now
-      # Only get the appointments with specific state
-      appointments = @student.appointments.sort_by(&:start_time).reverse
-      message = []
-      appointments.each do |appointment|
-        message << appointment.student_all_appointment_to_json
-      end
-
-      message.each { |msg|
-        if msg['pay_state'].eql? 'paid'
-          msg['pay_state'] = I18n.t 'term.pay.finished'
-        else
-          msg['pay_state'] = I18n.t 'term.pay.unfinished'
-        end
-      }
-
-      if message.empty?
-        json_error_message 204, (I18n.t 'error.messages.no_appointment')
-      else
-        render :json => message, :status => 200
-      end
-    else
-      json_error_message 401, (I18n.t 'error.messages.login')
-    end
-  end
 
   private
 
