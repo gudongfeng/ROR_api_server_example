@@ -91,7 +91,7 @@ RSpec.describe "Student request", :type => :request do
           params: { verification_code: 1234 },
           headers: headers
       expect(response).to have_http_status(:unauthorized)
-      expect(json['error']).to eq(I18n.t('students.errors.verification_code.invalid'))
+      expect(json['error']).to eq(I18n.t('errors.verification_code.invalid'))
     end
   end
 

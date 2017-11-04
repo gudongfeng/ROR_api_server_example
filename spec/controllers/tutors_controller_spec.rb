@@ -236,7 +236,7 @@ RSpec.describe Api::V1::TutorsController, type: :controller do
                                       password: 'new_pass',
                                       password_confirmation: 'new_pass' }
       expect(response).to have_http_status :not_found
-      expect(json['error']).to eq I18n.t('tutors.errors.verification_code.missing')
+      expect(json['error']).to eq I18n.t('errors.verification_code.missing')
     end
 
     it 'fails with invalid verification_code' do
@@ -245,7 +245,7 @@ RSpec.describe Api::V1::TutorsController, type: :controller do
       tutor.save
       post :reset_password, params: { verification_code: '7361' }
       expect(response).to have_http_status :unauthorized
-      expect(json['error']).to eq I18n.t('tutors.errors.verification_code.invalid')
+      expect(json['error']).to eq I18n.t('errors.verification_code.invalid')
     end
 
     it 'fails with missing parameter' do

@@ -10,6 +10,10 @@ cn:
   api:
     errors:
       parameters: 缺少参数
+  errors:
+    verification_code:
+      missing: 无法找到验证码
+      invalid: 错误的验证码
   appointment:
     conference_room:
       call_delay: 通话将于 %{time} 秒后开始
@@ -35,9 +39,6 @@ cn:
     errors:
       credential: 错误的令牌信息
       activation: 账户未激活,请先激活账号
-      verification_code:
-        missing: 无法找到验证码
-        invalid: 错误的验证码
       appointment:
         busy: 外教正忙，请稍后再试
         call_extend: 延长通话失败
@@ -62,9 +63,6 @@ cn:
     errors:
       credential: 错误的令牌信息
       activation: 账户未激活,请先激活账号
-      verification_code:
-        missing: 无法找到验证码
-        invalid: 错误的验证码
       appointment:
         occupied: 请求已被其他人接受或者已取消
         invalid_id: 查无此预约

@@ -2,6 +2,7 @@
 
 module Api
   module V1
+    # Student controller
     class StudentsController < ApiController
       prepend_before_action :authenticate_student_request,
                             only: %i[show edit reset_password get_status rate
@@ -34,15 +35,14 @@ module Api
       def create
         params_arr = %i[password phoneNumber country_code name gender
                         password_confirmation]
-        return render_params_missing_error unless params &&
-                                                  params?(params_arr, 'student')
+        return render_params_missing_error unless params?(params_arr, 'student')
         # Create a new student
         student = Core::Student.new(student_signup_params)
-        return save_model_error student unless student.save
+        return save_model_error(student) unless student.save
         # Send the verification code sms to the student
         student.send_verification_sms
-        render json: { message: I18n.t('students.create.success'),
-                       student_id: student.id }, status: :ok
+        render(json: { message: I18n.t('students.create.success'),
+                       student_id: student.id }, status: :ok)
       end
 
       # Activate student account according to the verification code
@@ -56,23 +56,8 @@ module Api
       error 401, 'unauthorized, account not found'
       error 401, 'verification code is wrong'
       def activate_account
-        return render_params_missing_error unless params &&
-                                                  params?([:verification_code])
-        code = current_student.verification_code
-        # error handler
-        if code.nil?
-          return render_error(
-            I18n.t('students.errors.verification_code.missing'),
-            :not_found
-          )
-        end
-        # If the verification code doesn't match
-        if code.to_i != params[:verification_code].to_i
-          return render_error(
-            I18n.t('students.errors.verification_code.invalid'),
-            :unauthorized
-          )
-        end
+        return render_params_missing_error unless params?([:verification_code])
+        return unless code_valid?(current_student.verification_code)
         # activate the account
         current_student.activate
         render_message(I18n.t('students.activate_account.success'))
@@ -94,13 +79,10 @@ module Api
       error 412, 'account not activate'
       error 422, 'parameter value error'
       def edit
-        if params && params[:student]
-          return save_model_error current_student unless
-            current_student.update_attributes(student_edit_params)
-          render_message(I18n.t('students.edit.success'))
-        else
-          render_params_missing_error
-        end
+        return render_params_missing_error unless params?([:student])
+        return save_model_error(current_student) unless
+          current_student.update_attributes(student_edit_params)
+        render_message(I18n.t('students.edit.success'))
       end
 
       # Get student information
@@ -110,7 +92,7 @@ module Api
       error 401, 'unauthorized, account not found'
       error 412, 'account not activate'
       def show
-        render json: current_student, status: :ok
+        render(json: current_student, status: :ok)
       end
 
       # Update the password once the verification process has done
@@ -125,41 +107,26 @@ module Api
       param :password, String, desc: 'new password'
       param :password_confirmation, String, desc: 'new password confirmation'
       formats ['JSON']
-      error 404, 'doesn\'t request for reset password first'
+      error 404, 'should request for reset password first'
       error 401, 'verification code doesn\'t match'
       error 401, 'unauthorized, account not found'
       error 400, 'parameter missing'
       error 412, 'account not activate'
       error 422, 'parameter value error'
       def reset_password
-        if params && params[:verification_code]
-          code = current_student.verification_code
-          # error handler
-          if code.nil?
-            return render_error(
-              I18n.t('students.errors.verification_code.missing'),
-              :not_found
-            )
-          end
-          if code.to_i != params[:verification_code].to_i
-            return render_error(
-              I18n.t('students.errors.verification_code.invalid'),
-              :unauthorized
-            )
-          end
-          if params[:password] && params[:password_confirmation]
-            # update the password
-            password_params = params.permit(:password, :password_confirmation)
-            unless current_student.update_attributes(password_params)
-              return save_model_error(current_student)
-            end
-            current_student.clear_verification_code
-            # return success message
-            return render_message(I18n.t('students.reset_password.success'))
-          end
+        return render_params_missing_error unless params?([:verification_code])
+        # Check the validation of the code
+        return unless code_valid?(current_student.verification_code)
+        unless params?(%i[password password_confirmation])
           return render_message(I18n.t('students.reset_password.verification'))
         end
-        render_params_missing_error
+        # Update the password
+        password_params = params.permit(:password, :password_confirmation)
+        return save_model_error(current_student) unless
+          current_student.update_attributes(password_params)
+        current_student.clear_verification_code
+        # Return success message
+        render_message(I18n.t('students.reset_password.success'))
       end
 
       # Student request to send a new verification_code for account activation
@@ -184,11 +151,9 @@ module Api
       error 412, 'account not activate'
       def destroy
         # clear the device token
-        if current_student.update_attribute(:device_token, nil)
-          render_message(I18n.t('students.destroy.success'))
-        else
-          save_model_error current_student
-        end
+        return save_model_error(current_student) unless
+          current_student.update_attribute(:device_token, nil)
+        render_message(I18n.t('students.destroy.success'))
       end
 
       api :POST, '/students/rate', 'student rates the appointment'
@@ -202,81 +167,43 @@ module Api
       error 400, 'parameter missing'
       error 422, 'parameter value error'
       def rate
-        if params && params[:appointment_id] && params[:rate] && params[:feedback]
-          ap = current_student.appointments.find(params[:appointment_id])
-
-          if ap&.update_attributes(student_feedback: params[:feedback],
-                                   student_rating: params[:rate])
-            return render_message(I18n.t('students.rate.success'))
-          end
-          return save_model_error(ap)
-        end
-        render_params_missing_error
+        return render_params_missing_error unless
+          params?(%i[appointment_id rate feedback])
+        ap = current_student.appointments.find(params[:appointment_id])
+        result = ap.update_attributes(student_feedback: params[:feedback],
+                                      student_rating: params[:rate])
+        return render_message(I18n.t('students.rate.success')) if result
+        save_model_error(ap)
       end
 
-      api :POST, '/students/appointments', 'retrieve all appointments of the student,
-    retrieve the specific appointment if we pass the appointment id.'
-      header 'Authorization', "authentication token has to be passed as part
-    of the request.", required: true
+      api :POST, '/students/appointments', 'retrieve all appointments of the
+        student, retrieve the specific appointment if we pass the appointment
+        id.'
+      header 'Authorization', 'authentication token has to be passed as part
+        of the request.', required: true
       param :appointment_id, Integer, desc: 'appointment id'
       error 401, 'unauthorized, account not found'
       error 412, 'account not activate'
       error 422, 'parameter value error'
       def appointments
-        if params && params[:appointment_id]
+        if params?([:appointment_id])
           # Return the appointment according to appointment id
-          ap = current_student.appointments.find_by_id(params[:appointment_id])
-          if ap
-            render json: ap, status: :ok
-          else
-            # Invalid appointment id
-            render_error(I18n.t('students.errors.appointment.invalid_id'),
-                         :unprocessable_entity)
-          end
+          ap = current_student.appointments.find_by(id: params[:appointment_id])
+          return render(json: ap, status: :ok) if ap
+          # Invalid appointment id
+          render_error(I18n.t('students.errors.appointment.invalid_id'),
+                       :unprocessable_entity)
         else
           # Return all the appointments
           aps = ActiveModelSerializers::SerializableResource
-                .new(current_student.appointments,
-                     each_serializer: Core::AppointmentSerializer)
-                .as_json
-          render json: aps, status: :ok
-        end
-      end
-
-      ################################################################################
-      # Following code Need to be updated
-      ################################################################################
-
-      # Get the number of tutors online
-      def tutors_online_count
-        if params && params[:plan_id]
-          c = Core::Tutor.where(['state = ? and level >= ?', 'available', params[:plan_id]]).count
-          render json: { message: c.to_s }, status: 200
-        else
-          json_error_message 400, (I18n.t 'error.messages.parameters')
+                .new(current_student.appointments).as_json
+          render(json: aps, status: :ok)
         end
       end
 
       private
 
-      # @param [Array] params_arr: the param you need to check
-      # @param [String] type: name of the first level of params
-      # @return [Boolean]: the params exist or not
-      def params?(params_arr, type = nil)
-        if type.nil?
-          params_arr.each do |param|
-            return false unless params[param]
-          end
-        else
-          return false unless params[type]
-          params_arr.each do |param|
-            return false unless params[type][param]
-          end
-        end
-        true
-      end
-
-      # (Updated) Only get the require information for student register
+      # Only get the require information for student register
       def student_signup_params
         params[:student][:balance] = 0
         params[:student][:state] = 'offline'
@@ -286,56 +213,27 @@ module Api
                                         :state)
       end
 
-      # (Updated) Only get the required information for the tutor editing
+      # Only get the required information for the tutor editing
       def student_edit_params
         params.require(:student).permit(:email, :name, :device_token,
                                         :picture, :gender)
       end
 
-      def tutor_state_params
-        params.require(:tutor).permit(:id)
-      end
-
-      # Define the require params for edit the appointment for student
-      def rate_feedback_params
-        params.require(:appointment).permit(:id, :student_rating, :student_feedback)
-      end
-
-      # Define the require params for edit the appointment for student
-      def rate_feedback_set_prioritized_tutor_params
-        params.permit(:set_prioritized_tutor)
-      end
-
-      # Only get the required information for the set prioritized tutor
-      def student_set_prioritized_tutor_params
-        params.require(:student).permit(:prioritized_tutor)
-      end
-
-      # Only get the required information for the request get tutor
-      def request_get_tutor_params
-        params.require(:request).permit(:id)
-      end
-
-      # Only get the required information for the request cancel look for tutors
-      def request_cancel_look_for_tutors_params
-        params.permit(:session_id)
-      end
-
-      # (updated) Check whether the student account has been activated or not
+      # Check whether the student account has been activated or not
       def activation_check
-        unless current_student.activated?
-          render json: { error: I18n.t('students.errors.activation') },
-                 status: :precondition_failed
-        end
+        return if current_student.activated?
+        render(json: { error: I18n.t('students.errors.activation') },
+               status: :precondition_failed)
       end
 
-      # (updated) Authenticate the student accourding to the auth_token in the header
+      # Authenticate the student accourding to the auth_token in the
+      # header
       def authenticate_student_request
-        @current_student = AuthorizeApiRequest.call('student', request.headers).result
-        unless @current_student
-          render json: { error: I18n.t('students.errors.credential') },
-                 status: :unauthorized
-        end
+        @current_student = AuthorizeApiRequest.call('student', request.headers)
+                                              .result
+        return if @current_student
+        render(json: { error: I18n.t('students.errors.credential') },
+               status: :unauthorized)
       end
     end
   end
