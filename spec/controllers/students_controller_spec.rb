@@ -89,7 +89,7 @@ RSpec.describe Api::V1::StudentsController, type: :controller do
       student.reload
       expect(student.activated).to eq false
       expect(response).to have_http_status(:unauthorized)
-      expect(json['error']).to eq (I18n.t 'students.errors.verification_code.invalid')
+      expect(json['error']).to eq (I18n.t 'errors.verification_code.invalid')
     end
   end
 
@@ -148,7 +148,7 @@ RSpec.describe Api::V1::StudentsController, type: :controller do
         verification_code, password: 'new_pass' , password_confirmation:
         'new_pass' }
       expect(response).to have_http_status :not_found
-      expect(json['error']).to eq I18n.t('students.errors.verification_code.missing')
+      expect(json['error']).to eq I18n.t('errors.verification_code.missing')
     end
 
     it 'fails with invalid verification_code' do
@@ -159,7 +159,7 @@ RSpec.describe Api::V1::StudentsController, type: :controller do
                                       password: 'new_pass' , 
                                       password_confirmation: 'new_pass' }
       expect(response).to have_http_status :unauthorized
-      expect(json['error']).to eq I18n.t('students.errors.verification_code.invalid')
+      expect(json['error']).to eq I18n.t('errors.verification_code.invalid')
     end
 
     it 'fails with missing parameter' do

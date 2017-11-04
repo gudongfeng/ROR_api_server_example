@@ -10,6 +10,10 @@ en:
   api:
     errors:
       parameters: parameters missing
+  errors:
+    verification_code:
+      missing: verification code has not been found
+      invalid: invalid verification code 
   appointment:
     conference_room:
       call_delay: conference room will start in %{time} seconds
@@ -35,9 +39,6 @@ en:
     errors:
       credential: invalid credentials
       activation: please activate your account first
-      verification_code:
-        missing: verification code has not been found
-        invalid: invalid verification code
       appointment:
         busy: tutor is busy, please try again later
         call_extend: fail to extend conference room
@@ -62,9 +63,6 @@ en:
     errors:
       credential: invalid credentials
       activation: please activate your account first
-      verification_code:
-        missing: verification code has not been found
-        invalid: invalid verification code
       appointment:
         occupied: request has been accepted or canceled
         invalid_id: invalid appointment id
