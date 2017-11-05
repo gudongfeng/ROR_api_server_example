@@ -6,6 +6,16 @@ class ApplicationController < ActionController::API
     render :json => 'hello, world!', :status => :ok
   end
 
+  # All other invalid API
+  api :GET, '/<invalid>', 'all other invalid api'
+  api :PUT, '/<invalid>', 'all other invalid api'
+  api :POST, '/<invalid>', 'all other invalid api'
+  api :DELETE, '/<invalid>', 'all other invalid api'
+  api_version 'root'
+  def invalid_api
+    render(json: I18n.t('not_found'), status: :not_found)
+  end
+  
   # get the server address
   def get_server_url
     if params && params[:version] && params[:type]

@@ -81,5 +81,5 @@ Rails.application.routes.draw do
   # sidekiq
   mount Sidekiq::Web, at: '/sidekiq'
 
-  match '*path', to: 'api#invalid_api', via: :all
+  match '*path', to: 'application#invalid_api', via: :all
 end
