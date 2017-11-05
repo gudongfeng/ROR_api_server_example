@@ -274,7 +274,7 @@ module Api
           end
           # Write the error
           next if success
-          error_str = I18n.t 'term.error'
+          error_str = I18n.t('term.error')
           error_str += ' : '
           # Grab the error message from the tutor
           education.errors.each do |attr, msg|
