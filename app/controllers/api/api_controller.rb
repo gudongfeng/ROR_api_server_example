@@ -3,26 +3,7 @@
 module Api
   # General function
   class ApiController < ApplicationController
-
     protected
-
-    # @param [Array] params_arr: the param you need to check
-    # @param [String] type: name of the first level of params
-    # @return [Boolean]: the params exist or not
-    def params?(params_arr, type = nil)
-      return false unless params
-      if type.nil?
-        params_arr.each do |param|
-          return false unless params[param]
-        end
-      else
-        return false unless params[type]
-        params_arr.each do |param|
-          return false unless params[type][param]
-        end
-      end
-      true
-    end
 
     # @param [String] code: the ground truth code
     # @return [Boolean]: the code is valid or not
@@ -39,6 +20,5 @@ module Api
       end
       true
     end
-
   end
 end
